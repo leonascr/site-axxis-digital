@@ -2084,6 +2084,62 @@ p {
   pointer-events: none;
 }
 
+/* CTA variant: full-width wave detail + focused photo (servicos.html) */
+.cta-card--photo {
+  grid-template-columns: 1fr 360px;
+  align-items: end;
+}
+
+.cta-card-copy-wrap {
+  position: relative;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+  grid-column: 1;
+}
+
+.cta-card--photo .cta-copy {
+  padding-right: 0;
+}
+
+.cta-card--photo .cta-copy h2 {
+  font-size: clamp(2rem, 3.2vw, 3rem);
+}
+
+.cta-card-wave {
+  position: absolute;
+  bottom: -70px;
+  display: block;
+  max-width: none;
+  height: auto;
+  pointer-events: none;
+}
+
+.cta-card-wave--left {
+  left: 0;
+  z-index: 1;
+  width: 64%;
+}
+
+.cta-card-wave--right {
+  right: 0;
+  bottom: -105px;
+  z-index: 5;
+  width: 100%;
+}
+
+.cta-card-photo {
+  position: absolute;
+  right: 0;
+  bottom: 70px;
+  z-index: 2;
+  width: 550px;
+  max-width: none;
+  height: auto;
+  pointer-events: none;
+}
+
 .cta-copy h2 {
   color: var(--white);
   font-size: clamp(2.4rem, 4.2vw, 4.1rem);
@@ -3352,6 +3408,8 @@ p {
   .feature-card.featured { grid-row: span 1; grid-column: span 2; min-height: 460px; }
   .process-grid, .faq-layout, .cta-card, .tax-focus, .about-story, .contact-page-grid { grid-template-columns: 1fr; gap: 50px; }
   .cta-photo, .cta-photo-blob { display: none; }
+  .cta-card-wave, .cta-card-photo { display: none; }
+  .cta-card-copy-wrap { grid-column: auto; }
   .process-copy, .contact-info { position: static; }
   .plans-grid { grid-template-columns: 1fr; }
   .plan-card.popular { transform: none; }
