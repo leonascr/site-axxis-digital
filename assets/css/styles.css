@@ -1528,6 +1528,68 @@ p {
   background: var(--white);
 }
 
+/* Services preview (home): stacked cards + photo */
+.services-preview-layout {
+  display: grid;
+  grid-template-columns: 1.35fr 0.65fr;
+  align-items: center;
+  gap: 30px;
+}
+
+.service-stack {
+  display: flex;
+  margin-top: 50px;
+}
+
+.service-stack .service-card {
+  flex: 0 0 240px;
+  width: 240px;
+  margin-right: -70px;
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.45s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.3s ease;
+}
+
+.service-stack .service-card:nth-child(1) { z-index: 1; }
+.service-stack .service-card:nth-child(2) { z-index: 2; }
+.service-stack .service-card:nth-child(3) { z-index: 3; }
+.service-stack .service-card:nth-child(4) { z-index: 4; }
+
+.service-stack .service-card:last-child {
+  margin-right: 0;
+}
+
+.service-stack .service-card:hover {
+  z-index: 10;
+  transform: translateY(-10px) scale(1.05);
+}
+
+.services-preview-photo {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  min-height: 380px;
+}
+
+.services-preview-blob {
+  position: absolute;
+  bottom: -14px;
+  left: 40%;
+  z-index: 2;
+  width: 66%;
+  max-width: none;
+  height: auto;
+  transform: translateX(-50%);
+}
+
+.services-preview-person {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+}
+
 /* Process */
 .process-section {
   position: relative;
@@ -1737,7 +1799,131 @@ p {
   letter-spacing: -0.025em;
 }
 
-.statement-signature {
+/* Photo-focused variant (home statement block) */
+.statement-card--photo {
+  grid-template-columns: 360px 1fr;
+  align-items: stretch;
+  gap: 0;
+  padding: 0;
+  min-height: 372px;
+  overflow: visible;
+  background: transparent;
+}
+
+.statement-card--photo::after {
+  content: none;
+}
+
+.statement-card-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  border-radius: 30px;
+  background: var(--navy);
+}
+
+.statement-card-bg::after {
+  position: absolute;
+  top: -190px;
+  right: -110px;
+  width: 330px;
+  height: 330px;
+  border-radius: 50%;
+  background: var(--orange);
+  content: '';
+}
+
+.statement-photo {
+  position: relative;
+  z-index: 2;
+  overflow: visible;
+}
+
+.statement-photo-blob {
+  position: absolute;
+  bottom: -8%;
+  left: 50%;
+  z-index: 0;
+  width: 280px;
+  height: 280px;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(255, 112, 20, 0.45), rgba(255, 112, 20, 0) 72%);
+}
+
+.statement-photo img {
+  position: absolute;
+  z-index: 1;
+  left: 50%;
+  bottom: 0;
+  display: block;
+  width: 380px;
+  max-width: none;
+  height: auto;
+  transform: translateX(-50%);
+}
+
+.statement-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 20px;
+  padding: 54px 60px 54px 6px;
+}
+
+.statement-content .statement-mark {
+  font-size: 90px;
+}
+
+.statement-content blockquote {
+  max-width: 620px;
+  font-size: clamp(1.3rem, 2.1vw, 1.85rem);
+}
+
+/* Mirrored variant: photo on the right (sobre.html) */
+.statement-card--photo-right {
+  grid-template-columns: 1fr 360px;
+}
+
+.statement-card--photo-right .statement-content {
+  padding: 54px 6px 54px 60px;
+  transform: translateY(-22px);
+}
+
+.statement-card--photo-right .statement-photo img {
+  left: 38%;
+  width: 330px;
+}
+
+.statement-card--photo-right .statement-card-bg::after {
+  top: auto;
+  right: auto;
+  bottom: -150px;
+  left: -90px;
+  width: 220px;
+  height: 220px;
+}
+
+.statement-signature strong,
+.statement-signature span {
+  display: block;
+}
+
+.statement-signature strong {
+  color: var(--orange);
+  font-family: 'Manrope', sans-serif;
+}
+
+.statement-signature span {
+  color: #b9bdcf;
+  font-size: 13px;
+}
+
+/* Legacy avatar-style signature (still used on sobre.html until refactored) */
+.statement-card > .statement-signature {
   position: relative;
   z-index: 2;
   padding-left: 28px;
@@ -1758,21 +1944,6 @@ p {
   height: 100%;
   object-fit: cover;
   object-position: center 12%;
-}
-
-.statement-signature strong,
-.statement-signature span {
-  display: block;
-}
-
-.statement-signature strong {
-  color: var(--orange);
-  font-family: 'Manrope', sans-serif;
-}
-
-.statement-signature span {
-  color: #b9bdcf;
-  font-size: 13px;
 }
 
 /* FAQ */
@@ -2875,14 +3046,13 @@ p {
 
 .people-photo-blob {
   position: absolute;
-  bottom: 4%;
+  bottom: -18px;
   left: 50%;
-  z-index: 0;
-  width: 76%;
-  height: 58%;
+  z-index: 2;
+  width: 95%;
+  max-width: none;
+  height: auto;
   transform: translateX(-50%);
-  border-radius: 50%;
-  background: radial-gradient(closest-side, rgba(255, 112, 20, 0.2), rgba(255, 112, 20, 0) 72%);
 }
 
 .people-photo {
@@ -2890,11 +3060,12 @@ p {
   z-index: 1;
   display: block;
   width: 100%;
-  max-width: 420px;
+  max-width: 490px;
   height: auto;
 }
 
-.about-story .people-photo {
+.about-story .people-photo,
+.about-story .people-photo-blob {
   border-radius: 0;
   box-shadow: none;
 }
@@ -3117,6 +3288,10 @@ p {
   .hero-grid { gap: 28px; }
   .dashboard { right: 0; }
   .service-grid { grid-template-columns: repeat(2, 1fr); }
+  .services-preview-layout { grid-template-columns: 1fr; }
+  .services-preview-photo { display: none; }
+  .service-stack { flex-wrap: wrap; gap: 18px; }
+  .service-stack .service-card { flex: 1 1 240px; width: auto; margin-right: 0; }
 }
 
 @media (max-width: 980px) {
@@ -3182,6 +3357,11 @@ p {
   .plan-card.popular { transform: none; }
   .statement-card { grid-template-columns: 70px 1fr; }
   .statement-signature { grid-column: 2; border-left: 0; padding-left: 0; }
+  .statement-card--photo { grid-template-columns: 220px 1fr; min-height: 360px; }
+  .statement-card--photo .statement-signature { grid-column: auto; }
+  .statement-card--photo-right { grid-template-columns: 1fr 220px; }
+  .statement-photo img { width: 220px; }
+  .statement-content { padding: 40px 44px 40px 6px; }
   .footer-grid { grid-template-columns: repeat(2, 1fr); }
   .footer-brand { grid-column: 1 / -1; }
   .service-tabs-layout { grid-template-columns: 1fr; }
@@ -3233,6 +3413,14 @@ p {
   .statement-mark { font-size: 78px; }
   .statement-card blockquote { margin-top: 5px; }
   .statement-signature { margin-top: 24px; }
+  .statement-card--photo { display: grid; grid-template-columns: 1fr; grid-template-rows: auto auto; min-height: 0; padding: 0; border-radius: 24px; }
+  .statement-card--photo .statement-signature { margin-top: 0; }
+  .statement-card--photo .statement-card-bg { border-radius: 24px; }
+  .statement-photo { height: 236px; }
+  .statement-photo img { width: 200px; }
+  .statement-content { padding: 22px 26px 36px; text-align: center; align-items: center; }
+  .statement-content .statement-mark { font-size: 64px; }
+  .statement-content blockquote { margin-top: 0; }
   .cta-card { padding: 38px 22px; border-radius: 24px; }
   .form-grid { grid-template-columns: 1fr; }
   .footer-grid { grid-template-columns: 1fr 1fr; gap: 35px 20px; }
@@ -4058,7 +4246,13 @@ body[data-page="home"] .dash-menu {
 }
 
 body[data-page="home"] .dash-menu .mini-logo {
-  background: #ff7200;
+  background: #ffffff;
+}
+
+body[data-page="home"] .mini-logo img {
+  width: 16px;
+  height: auto;
+  max-width: none;
 }
 
 body[data-page="home"] .dash-menu span {
@@ -4262,7 +4456,7 @@ body[data-page="home"] .floating-card small {
 }
 
 body[data-page="home"] .tax-card {
-  top: 150px;
+  top: 190px;
   left: -15px;
 }
 
