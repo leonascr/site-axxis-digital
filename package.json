@@ -1,0 +1,10 @@
+{
+  "name": "axxis-contabilidade-digital",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Site estático (HTML/CSS/JS) da Axxis Contabilidade Digital.",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  }
+}
