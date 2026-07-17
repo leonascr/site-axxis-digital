@@ -335,12 +335,5 @@
     });
   }
 
-  const params = new URLSearchParams(window.location.search);
-  const autoShowEnabled = params.get('modal') !== 'off';
-  if (autoShowEnabled && !readSeenState()) {
-    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    window.setTimeout(() => openModal(), reducedMotion ? 120 : 850);
-  }
-
   window.axxisOpenDiagnostic = () => openModal({ force: true });
 })();

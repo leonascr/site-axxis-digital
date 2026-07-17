@@ -2140,6 +2140,33 @@ p {
   pointer-events: none;
 }
 
+/* Mirrored variant: photo on the left (sobre.html) */
+.cta-card--photo-left {
+  grid-template-columns: 360px 1fr;
+}
+
+.cta-card--photo-left .cta-card-copy-wrap {
+  grid-column: 2;
+}
+
+.cta-card--photo-left .cta-card-wave--left {
+  left: auto;
+  right: 0;
+  transform: scaleX(-1);
+}
+
+.cta-card--photo-left .cta-card-wave--right {
+  right: auto;
+  left: 0;
+  transform: scaleX(-1);
+}
+
+.cta-card--photo-left .cta-card-photo {
+  right: auto;
+  left: 0;
+  transform: scaleX(-1);
+}
+
 .cta-copy h2 {
   color: var(--white);
   font-size: clamp(2.4rem, 4.2vw, 4.1rem);
