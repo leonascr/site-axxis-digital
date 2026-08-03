@@ -218,6 +218,44 @@
   document.querySelectorAll('[data-year]').forEach((element) => {
     element.textContent = String(new Date().getFullYear());
   });
+
+  document.querySelectorAll('.platform-showcase').forEach((showcase) => {
+    const tabs = [...showcase.querySelectorAll('.platform-tab')];
+    const slides = [...showcase.querySelectorAll('.platform-device-slide')];
+    const indicator = showcase.querySelector('.platform-tabs-indicator');
+
+    const moveIndicator = (tab) => {
+      if (!indicator) return;
+      indicator.style.width = `${tab.offsetWidth}px`;
+      indicator.style.height = `${tab.offsetHeight}px`;
+      indicator.style.transform = `translate(${tab.offsetLeft}px, ${tab.offsetTop}px)`;
+    };
+
+    const activeTab = tabs.find((tab) => tab.classList.contains('active')) || tabs[0];
+    if (activeTab && indicator) {
+      indicator.classList.add('no-anim');
+      moveIndicator(activeTab);
+      requestAnimationFrame(() => requestAnimationFrame(() => indicator.classList.remove('no-anim')));
+    }
+
+    tabs.forEach((tab) => {
+      tab.addEventListener('click', () => {
+        tabs.forEach((other) => other.classList.remove('active'));
+        tab.classList.add('active');
+        moveIndicator(tab);
+
+        const targetSlide = tab.dataset.platformTab;
+        slides.forEach((slide) => {
+          slide.classList.toggle('active', slide.dataset.platformSlide === targetSlide);
+        });
+      });
+    });
+
+    window.addEventListener('resize', () => {
+      const current = tabs.find((tab) => tab.classList.contains('active'));
+      if (current) moveIndicator(current);
+    });
+  });
 })();
 
 (() => {

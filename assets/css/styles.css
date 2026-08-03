@@ -118,6 +118,10 @@ p {
   padding: 112px 0;
 }
 
+.services-preview + .section {
+  padding-top: 56px;
+}
+
 .section-soft {
   background: var(--soft);
 }
@@ -1430,6 +1434,83 @@ p {
   font-weight: 900;
 }
 
+/* Platform showcase (tabs + device mockup) */
+.platform-showcase {
+  margin-top: 54px;
+}
+
+.platform-tabs {
+  position: relative;
+  display: flex;
+  gap: 8px;
+  max-width: 980px;
+  margin: 0 auto 26px;
+  padding: 8px;
+  border-radius: 999px;
+  background: var(--soft);
+}
+
+.platform-tabs-indicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  border-radius: 999px;
+  background: var(--navy);
+  box-shadow: var(--shadow-md);
+  transition: transform 0.4s cubic-bezier(0.65, 0, 0.35, 1), width 0.4s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.platform-tabs-indicator.no-anim {
+  transition: none;
+}
+
+.platform-tab {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  min-height: 54px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: #5b5f6d;
+  font-family: 'Manrope', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: color 0.25s ease;
+}
+
+.platform-tab.active {
+  color: var(--white);
+}
+
+.platform-device {
+  position: relative;
+  max-width: 900px;
+  margin: 0 auto;
+  aspect-ratio: 16 / 9;
+}
+
+.platform-device-slide {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  opacity: 0;
+  transition: opacity 0.45s ease;
+}
+
+.platform-device-slide.active {
+  opacity: 1;
+}
+
+@media (max-width: 980px) {
+  .platform-tabs { flex-wrap: wrap; border-radius: 22px; }
+  .platform-tab { flex: 1 1 45%; }
+}
+
 /* Services cards */
 .services-preview {
   background: var(--white);
@@ -2163,8 +2244,23 @@ p {
 
 .cta-card--photo-left .cta-card-photo {
   right: auto;
-  left: 0;
+  left: -30px;
   transform: scaleX(-1);
+}
+
+/* Variant without a person photo: content centered across the full card width */
+.cta-card--centered {
+  grid-template-columns: 1fr;
+}
+
+.cta-card--centered .cta-card-copy-wrap {
+  grid-column: 1;
+  width: min(720px, 100%);
+  margin-inline: auto;
+}
+
+.cta-card--centered .cta-copy {
+  padding-right: 0;
 }
 
 .cta-copy h2 {
@@ -2825,7 +2921,7 @@ p {
 
 .tax-focus-visual {
   position: relative;
-  min-height: 460px;
+  min-height: 520px;
   overflow: hidden;
   border-radius: 30px;
   background: var(--navy);
@@ -3130,7 +3226,7 @@ p {
 .people-photo-blob {
   position: absolute;
   bottom: -18px;
-  left: 50%;
+  left: 38%;
   z-index: 2;
   width: 95%;
   max-width: none;
@@ -4331,7 +4427,7 @@ body[data-page="home"] .dash-menu {
 }
 
 body[data-page="home"] .dash-menu .mini-logo {
-  background: #ffffff;
+  background: transparent;
 }
 
 body[data-page="home"] .mini-logo img {
