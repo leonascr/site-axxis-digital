@@ -2443,6 +2443,12 @@ p {
   transform: translateX(3px);
 }
 
+.footer-col span {
+  color: #9195a1;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
 .footer-bottom {
   min-height: 70px;
   display: flex;
