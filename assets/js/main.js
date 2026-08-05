@@ -15,13 +15,39 @@
     });
   };
 
+  let navCloseTimer = null;
+
+  const setMobileNav = (open, restoreFocus = false) => {
+    if (!mobileToggle || !mainNav) return;
+    window.clearTimeout(navCloseTimer);
+    mobileToggle.setAttribute('aria-expanded', String(open));
+    mobileToggle.setAttribute('aria-label', open ? 'Fechar menu' : 'Abrir menu');
+
+    if (open) {
+      mainNav.classList.remove('is-closing');
+      body.classList.remove('menu-closing');
+      mainNav.classList.add('open');
+      body.classList.add('menu-open');
+      return;
+    }
+
+    if (!mainNav.classList.contains('open')) return;
+    const hadFocusInside = mainNav.contains(document.activeElement);
+    mainNav.classList.remove('open');
+    mainNav.classList.add('is-closing');
+    body.classList.remove('menu-open');
+    body.classList.add('menu-closing');
+    if (restoreFocus && hadFocusInside) mobileToggle.focus();
+    navCloseTimer = window.setTimeout(() => {
+      mainNav.classList.remove('is-closing');
+      body.classList.remove('menu-closing');
+      closeDropdowns();
+    }, 200);
+  };
+
   if (mobileToggle && mainNav) {
     mobileToggle.addEventListener('click', () => {
-      const open = mobileToggle.getAttribute('aria-expanded') === 'true';
-      mobileToggle.setAttribute('aria-expanded', String(!open));
-      mainNav.classList.toggle('open', !open);
-      body.classList.toggle('menu-open', !open);
-      if (open) closeDropdowns();
+      setMobileNav(mobileToggle.getAttribute('aria-expanded') !== 'true');
     });
   }
 
@@ -39,35 +65,207 @@
   });
 
   document.addEventListener('click', (event) => {
-    if (!event.target.closest('[data-dropdown]') && !event.target.closest('[data-mobile-toggle]')) {
+    const insideToggle = event.target.closest('[data-mobile-toggle]');
+    if (!event.target.closest('[data-dropdown]') && !insideToggle) {
       closeDropdowns();
+    }
+    if (!event.target.closest('[data-main-nav]') && !insideToggle && mainNav && mainNav.classList.contains('open')) {
+      setMobileNav(false);
     }
   });
 
   document.addEventListener('keydown', (event) => {
     if (event.key !== 'Escape') return;
     closeDropdowns();
-    if (mobileToggle && mainNav) {
-      mobileToggle.setAttribute('aria-expanded', 'false');
-      mainNav.classList.remove('open');
-      body.classList.remove('menu-open');
-    }
+    setMobileNav(false, true);
   });
 
   document.querySelectorAll('[data-main-nav] a').forEach((link) => {
     link.addEventListener('click', () => {
-      if (window.innerWidth > 980 || !mobileToggle || !mainNav) return;
-      mobileToggle.setAttribute('aria-expanded', 'false');
-      mainNav.classList.remove('open');
-      body.classList.remove('menu-open');
-      closeDropdowns();
+      if (window.innerWidth > 980) return;
+      setMobileNav(false);
     });
   });
+
+  // Segment carousel: arrows step by one card, and on touch devices (where :hover never
+  // fires reliably) tapping a card expands its topic list instead of following the link.
+  const segTrack = document.querySelector('[data-segment-track]');
+  if (segTrack) {
+    const originals = [...segTrack.querySelectorAll('.segment-person')];
+
+    // Infinite loop: flank the real cards with a clone set on each side, then silently
+    // rewind scrollLeft by one set whenever the viewport crosses into a clone block.
+    // Clones drop their ids (the mega-menu anchors must stay unique) and are hidden from
+    // assistive tech, so the loop is purely visual.
+    const cloneSet = () => originals.map((card) => {
+      const copy = card.cloneNode(true);
+      copy.removeAttribute('id');
+      copy.setAttribute('aria-hidden', 'true');
+      copy.classList.add('is-clone');
+      copy.querySelectorAll('a, button').forEach((el) => el.setAttribute('tabindex', '-1'));
+      return copy;
+    });
+
+    const head = cloneSet();
+    const tail = cloneSet();
+    tail.forEach((c) => segTrack.appendChild(c));
+    head.reverse().forEach((c) => segTrack.insertBefore(c, segTrack.firstChild));
+
+    const gapOf = () => parseFloat(getComputedStyle(segTrack).columnGap) || 0;
+    const step = () => (originals[0]?.getBoundingClientRect().width || segTrack.clientWidth) + gapOf();
+    const setWidth = () => originals.length * step();
+
+    const withoutSmooth = (fn) => {
+      const prevBehavior = segTrack.style.scrollBehavior;
+      segTrack.style.scrollBehavior = 'auto';
+      fn();
+      // Force a reflow so the instant jump lands before smooth scrolling resumes.
+      void segTrack.offsetWidth;
+      segTrack.style.scrollBehavior = prevBehavior;
+    };
+
+    // Which card of the real set is in view, as an index. Kept so a re-layout can put the
+    // visitor back where they were instead of snapping to the start.
+    let cardOffset = 0;
+    const anchor = () => withoutSmooth(() => { segTrack.scrollLeft = setWidth() + cardOffset * step(); });
+    anchor();
+    let lastStep = step();
+
+    let wrapping = false;
+    segTrack.addEventListener('scroll', () => {
+      if (wrapping) return;
+      const w = setWidth();
+      if (segTrack.scrollLeft < w * 0.5 || segTrack.scrollLeft > w * 2.5) {
+        wrapping = true;
+        const delta = segTrack.scrollLeft < w * 0.5 ? w : -w;
+        withoutSmooth(() => { segTrack.scrollLeft += delta; });
+        wrapping = false;
+      }
+      cardOffset = Math.round((segTrack.scrollLeft - setWidth()) / step());
+    }, { passive: true });
+
+    // Card width is what the loop maths depends on, and only a width change can invalidate
+    // it. Mobile browsers fire resize just from the address bar collapsing during a scroll —
+    // re-anchoring on those was enough to throw the carousel back to the first card while
+    // someone was reading.
+    window.addEventListener('resize', () => {
+      const currentStep = step();
+      if (Math.abs(currentStep - lastStep) < 1) return;
+      lastStep = currentStep;
+      anchor();
+    });
+
+    // ---- drag to scroll (pointer devices; touch keeps native momentum scrolling)
+    let dragging = false;
+    let dragStartX = 0;
+    let dragStartScroll = 0;
+    let dragDistance = 0;
+
+    segTrack.addEventListener('pointerdown', (event) => {
+      if (event.pointerType === 'touch' || event.button !== 0) return;
+      dragging = true;
+      dragDistance = 0;
+      dragStartX = event.clientX;
+      dragStartScroll = segTrack.scrollLeft;
+      segTrack.classList.add('is-dragging');
+      segTrack.style.scrollBehavior = 'auto';
+    });
+
+    segTrack.addEventListener('pointermove', (event) => {
+      if (!dragging) return;
+      const dx = event.clientX - dragStartX;
+      dragDistance = Math.max(dragDistance, Math.abs(dx));
+      segTrack.scrollLeft = dragStartScroll - dx;
+    });
+
+    const endDrag = () => {
+      if (!dragging) return;
+      dragging = false;
+      segTrack.classList.remove('is-dragging');
+      segTrack.style.scrollBehavior = '';
+    };
+    segTrack.addEventListener('pointerup', endDrag);
+    segTrack.addEventListener('pointercancel', endDrag);
+    segTrack.addEventListener('pointerleave', endDrag);
+    // A drag that ends on a link must not also follow it.
+    segTrack.addEventListener('click', (event) => {
+      if (dragDistance > 6) {
+        event.preventDefault();
+        event.stopPropagation();
+        dragDistance = 0;
+      }
+    }, true);
+
+    // ---- autoplay, one card at a time
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const AUTOPLAY_MS = 3600;
+    let timer = null;
+    let inView = true;
+
+    // Latched by the first touch. On a pointer device "leave" is a real signal that the
+    // visitor is done, so autoplay can resume; on a touch screen there is no leave, and the
+    // pointerleave that fires when the finger lifts was restarting the rotation a moment
+    // after a tap — carrying the just-expanded card off screen, which read as the tap not
+    // having worked at all. Once someone has touched the track, they drive it.
+    let userEngaged = false;
+
+    const stop = () => { clearInterval(timer); timer = null; };
+    const start = () => {
+      if (timer || reduceMotion || userEngaged || !inView || document.hidden) return;
+      timer = setInterval(() => {
+        if (dragging) return;
+        segTrack.scrollBy({ left: step(), behavior: 'smooth' });
+      }, AUTOPLAY_MS);
+    };
+
+    const carousel = segTrack.closest('.segment-carousel') || segTrack;
+    // Hovering expands a card's topics, so pause and let the visitor actually read it.
+    carousel.addEventListener('pointerenter', stop);
+    carousel.addEventListener('pointerleave', start);
+    carousel.addEventListener('focusin', stop);
+    carousel.addEventListener('focusout', start);
+    segTrack.addEventListener('touchstart', () => { userEngaged = true; stop(); }, { passive: true });
+    document.addEventListener('visibilitychange', () => (document.hidden ? stop() : start()));
+
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver((entries) => {
+        inView = entries[0].isIntersecting;
+        if (inView) start(); else stop();
+      }, { threshold: 0.25 }).observe(carousel);
+    } else {
+      start();
+    }
+
+    // Phones open on "Arquitetura e engenharia", already expanded. There is no hover on a
+    // touch screen, so nothing otherwise signals that these cards open at all — landing on
+    // one that is already open is the hint. The track is a loop, so this is just where the
+    // initial scroll lands; the card order is untouched and desktop still starts at the top.
+    // Autoplay is held off for the same reason the first touch holds it off: rotating away
+    // from the card three seconds in would undo the thing this is here to show.
+    const openOnLoad = originals.findIndex((card) => card.id === 'engenharia');
+    if (openOnLoad > -1 && window.matchMedia('(max-width: 720px)').matches) {
+      cardOffset = openOnLoad;
+      anchor();
+      originals[openOnLoad].classList.add('is-open');
+      userEngaged = true;
+      stop();
+    }
+
+    // Touch fallback for the hover reveal (clones included, so every visible card responds).
+    if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+      segTrack.addEventListener('click', (event) => {
+        const card = event.target.closest('.segment-person');
+        if (!card || event.target.closest('a')) return;
+        card.classList.toggle('is-open');
+      });
+    }
+  }
 
   const currentPage = body.dataset.page;
   if (currentPage) {
     document.querySelectorAll(`[data-nav="${currentPage}"]`).forEach((link) => {
       link.classList.add('active');
+      if (link.tagName === 'A') link.setAttribute('aria-current', 'page');
     });
   }
 

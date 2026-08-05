@@ -118,8 +118,10 @@ p {
   padding: 112px 0;
 }
 
+/* "Tudo conectado", which follows the services cards on the home. The gap a visitor sees is
+   this plus the previous section's 112px of bottom padding, so 56 here was really 168px. */
 .services-preview + .section {
-  padding-top: 56px;
+  padding-top: 24px;
 }
 
 .section-soft {
@@ -449,6 +451,17 @@ p {
 
 .header-cta {
   flex: 0 0 auto;
+}
+
+.nav-mobile-cta {
+  display: none;
+}
+
+/* Mobile-only nav furniture. Kept display:none in base scope (same convention as
+   .nav-mobile-cta above) so the desktop flex row never gains an extra gap slot. */
+.nav-foot,
+.mega-all {
+  display: none;
 }
 
 .mega-menu {
@@ -1420,23 +1433,26 @@ p {
   font-size: 14px;
 }
 
+/* Small orange dot instead of the filled ✓ badge — the badges read as nine competing
+   buttons once the card expands. margin-top centres the dot on the first line of text. */
 .check-stack li::before {
-  width: 22px;
-  height: 22px;
+  width: 6px;
+  height: 6px;
   flex: 0 0 auto;
-  display: grid;
-  place-items: center;
+  margin-top: 8px;
   border-radius: 50%;
-  color: var(--white);
   background: var(--orange);
-  content: '✓';
-  font-size: 11px;
-  font-weight: 900;
+  content: '';
 }
 
 /* Platform showcase (tabs + device mockup) */
 .platform-showcase {
   margin-top: 54px;
+  /* The section carries 112px of padding below, against 54px between the tabs and the
+     mockup — enough of a difference that the laptop looked pinned to the tabs and adrift
+     over the space underneath. Trimming the bottom to ~80px evens the two out without
+     touching the section rhythm the rest of the page follows. */
+  margin-bottom: -32px;
 }
 
 .platform-tabs {
@@ -1444,7 +1460,8 @@ p {
   display: flex;
   gap: 8px;
   max-width: 980px;
-  margin: 0 auto 26px;
+  /* 54px, matching the heading-to-tabs gap, so the showcase has one internal rhythm. */
+  margin: 0 auto 54px;
   padding: 8px;
   border-radius: 999px;
   background: var(--soft);
@@ -1485,11 +1502,14 @@ p {
   color: var(--white);
 }
 
+/* Matches the mockups' own proportions (1366x826, cropped to the artwork). With the old 16/9
+   box and object-fit:contain these 4:3 sources would have been letterboxed, shrinking the
+   laptop to fit the height and leaving ~110px of dead space down each side. */
 .platform-device {
   position: relative;
   max-width: 900px;
   margin: 0 auto;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 1366 / 826;
 }
 
 .platform-device-slide {
@@ -2221,6 +2241,15 @@ p {
   pointer-events: none;
 }
 
+/* como-funciona: this subject is framed tighter than the others (she fills the canvas top to
+   bottom), so at the shared 550px she outweighed the form. Only the width is overridden —
+   `bottom` has to stay at 70px because the cutout ends in a flat horizontal edge across her
+   sweater, and 70px is what parks that edge underneath the orange wave. Lifting her even
+   ~30px puts the cut out in the open on the right, where the wave sits lowest. */
+body[data-page="como"] .cta-card-photo {
+  width: 500px;
+}
+
 /* Mirrored variant: photo on the left (sobre.html) */
 .cta-card--photo-left {
   grid-template-columns: 360px 1fr;
@@ -2750,10 +2779,10 @@ p {
   font-size: 16px;
 }
 
+/* Retired: the ✓ checklist is hidden on every breakpoint — the panel's intro paragraph
+   already covers the same ground. Markup is still in servicos.html (see note below). */
 .service-panel-list {
-  display: grid;
-  gap: 12px;
-  margin-top: 27px;
+  display: none;
 }
 
 .service-panel-list li {
@@ -2832,90 +2861,274 @@ p {
 }
 
 /* Segment page */
-.segment-index-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 18px;
-  margin-top: 50px;
+/* Segments: one card per segment, photo-led. Replaces the old teaser grid + detail list,
+   which listed the same six segments twice. The #ids live on these cards now — the nav
+   mega-menu on every page links to segmentos.html#consultoria and friends. */
+/* Same reasoning as `.services-preview + .section`: the page hero already ends with 84px of
+   its own padding, so the full 112px here put 196px between the hero copy and the segments
+   heading. Scoped to this page — the other page-hero layouts are not being changed. */
+body[data-page="segmentos"] .page-hero + .section {
+  padding-top: 72px;
 }
 
-.segment-index-card {
-  min-height: 280px;
+/* Carousel: a horizontal snap track. Cards keep a FIXED height — on hover the photo pane
+   shrinks and the topic list takes over the reclaimed space, so nothing reflows, the track
+   never has to clip a grown card, and neighbours stay put. */
+/* The track scrolls, and `overflow-x: auto` forces `overflow-y` to compute to auto as well,
+   so it clips vertically too — the hover shadow reaches 94px below a card and had 12px of
+   room, which is why it ended in a hard horizontal line. The track now reserves the shadow's
+   full reach as padding and these margins take the same amount straight back, so the
+   carousel still occupies exactly the height it did before. */
+.segment-carousel {
+  position: relative;
+  width: 100vw;
+  margin-top: 6px;
+  margin-bottom: -84px;
+  margin-inline: calc(50% - 50vw);
+}
+
+/* Full-bleed track. The inline padding lines the first card up with the container's left
+   edge while letting the row run to both screen edges. Snap is `proximity`, not
+   `mandatory`: the infinite-loop jump in main.js rewrites scrollLeft, and mandatory snap
+   fights that and produces visible stutter. */
+.segment-carousel-track {
+  display: flex;
+  gap: 22px;
+  /* 48 / 96 = how far --shadow-md (0 24px 70px) actually reaches above and below a card. */
+  padding: 48px max(20px, calc((100vw - var(--container)) / 2)) 96px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x proximity;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+}
+
+.segment-carousel-track::-webkit-scrollbar {
+  display: none;
+}
+
+/* Drag-to-scroll on pointer devices. Touch keeps native momentum scrolling. */
+.segment-carousel-track {
+  cursor: grab;
+}
+
+.segment-carousel-track.is-dragging {
+  cursor: grabbing;
+  scroll-snap-type: none;
+  user-select: none;
+}
+
+.segment-carousel-track.is-dragging .segment-person {
+  pointer-events: none;
+}
+
+/* 480, not 466: expanded, the body needs 360px and the photo pane will not go below its
+   min-height, so at 466 the two added up to more than the card and `overflow:hidden` ate
+   the body's bottom padding — the "Falar sobre este segmento" link sat flush on the edge.
+   The extra 14px is slack the photo absorbs while collapsed. */
+.segment-person {
+  position: relative;
+  flex: 0 0 336px;
+  height: 480px;
   display: flex;
   flex-direction: column;
-  padding: 28px;
+  overflow: hidden;
+  scroll-snap-align: start;
   border: 1px solid var(--line);
-  border-radius: 24px;
+  border-radius: 26px;
   background: var(--white);
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  scroll-margin-top: 110px;
+  transition: box-shadow 0.28s ease, border-color 0.28s ease;
 }
 
-.segment-index-card:hover {
+.segment-person:hover {
   box-shadow: var(--shadow-md);
-  transform: translateY(-6px);
 }
 
-.segment-index-card h3 {
-  margin-top: 24px;
+.segment-person-photo {
+  position: relative;
+  /* Absorbs whatever height the body does not need. At rest that means a taller photo
+     instead of dead white space; as the topics expand the body grows and this shrinks in
+     step. No magic numbers, and no empty gap in either state. */
+  flex: 1 1 auto;
+  /* Floor, not a target — the photo lands well above this in both states. It exists so an
+     unusually tall body (a title that wraps on a narrow phone) steals from the photo
+     instead of being clipped off the bottom of the card. */
+  min-height: 92px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  overflow: hidden;
+  /* Both stops are straight tints of --orange (#ff7014, hue 23.5), so the pane reads as the
+     brand colour. It used to run from hue 26 to #f4f6fa at hue 220 — a cool blue-grey — and
+     the blend between them passed through desaturated mauve, which is what made the cards
+     look pink next to the orange in the heading. Matching the hue alone was not enough: at
+     0.16 saturation the pane still read as cream rather than orange, so the stops carry
+     0.34 / 0.15 — plainly the brand colour, without out-shouting the person in the photo. */
+  background: linear-gradient(158deg, #ffcaa8 0%, #ffe8d9 78%);
+}
+
+.segment-person-photo::after {
+  position: absolute;
+  right: -42px;
+  bottom: -86px;
+  width: 190px;
+  height: 190px;
+  border-radius: 50%;
+  background: rgba(255, 112, 20, 0.14);
+  content: '';
+}
+
+.segment-person-photo img {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center bottom;
+  filter: drop-shadow(0 16px 26px rgba(5, 6, 62, 0.16));
+}
+
+/* Glyph only, no plate. 28px rather than the 24px the badge left inside itself: a bare mark
+   needs to be slightly larger to hold the same weight once the white square is gone. At 20%
+   it reads as a watermark rather than a label, so it is decorative only — the segment is
+   already named by the heading, and the svg carries aria-hidden. */
+.segment-person-photo .icon {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  z-index: 2;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border-radius: 0;
+  background: none;
+  opacity: 0.2;
+}
+
+/* For source photos whose subjects run off the canvas edge, floating them centred makes the
+   slice obvious against the gradient. Filling the frame instead puts the cut exactly on the
+   card border, where it reads as an ordinary crop. Anchored to the top so faces survive.
+   Remove this modifier once the artwork is outpainted with margin on both sides. */
+.segment-person-photo--bleed {
+  align-items: flex-start;
+}
+
+.segment-person-photo--bleed img {
+  object-fit: cover;
+  /* --focal picks which horizontal band survives the crop; set per card, because each
+     source photo carries a different amount of empty headroom above the subject. */
+  object-position: center var(--focal, 12%);
+  filter: none;
+}
+
+.segment-person-body {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  padding: 26px 26px 28px;
+}
+
+/* 20px, not 21: the longest title ("Marketing, design e criativos") measures 280px at 21px
+   against 282px of inner width, so it wrapped on any card a hair narrower and dragged that
+   card's white block out of line with its neighbours. At 20px it needs 266px and stays on
+   one line everywhere down to a 360px phone — which is what keeps the blocks aligned, with
+   no reserved second line and therefore no empty band above the title. */
+.segment-person-body h3 {
   color: var(--navy);
-  font-size: 24px;
+  font-size: 20px;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
 }
 
-.segment-index-card p {
-  margin-top: 12px;
+/* Locked to exactly four lines. The photo pane above is flex:1, so any variation in this
+   paragraph's height moves where the white block starts — and the descriptions run 3 or 4
+   lines, which left the cards visibly out of line with each other. min-height pads the
+   short ones, line-clamp caps anything longer, so the block starts at the same y on every
+   card at any width. 6.4em = 4 x the inherited 1.6 line-height. */
+.segment-person-body > p {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  overflow: hidden;
+  min-height: 6.4em;
+  margin-top: 11px;
   font-size: 14px;
 }
 
-.segment-index-card .text-link {
-  margin-top: auto;
-  padding-top: 24px;
-  color: var(--orange);
+/* Topics stay in the DOM and simply collapse, so they remain crawlable and screen-reader
+   reachable — consistent with how the service-panel copy is handled. */
+.segment-person-body .check-stack {
+  margin-top: 0;
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.42s cubic-bezier(0.22, 0.8, 0.28, 1), opacity 0.3s ease, margin-top 0.42s ease;
+}
+
+.segment-person-body .check-stack li {
   font-size: 13px;
 }
 
-.segment-detail-list {
-  display: grid;
-  gap: 26px;
-  margin-top: 54px;
+/* Revealed with the topics. It keeps its layout slot (margin-top:auto) so nothing shifts —
+   only opacity animates. pointer-events is cut while hidden so an invisible link can never
+   be clicked, and :focus-within brings it back for keyboard users. */
+/* Collapses to zero height at rest, exactly like .check-stack. Fading it alone was not
+   enough: an invisible-but-laid-out link still reserved 43px, which is what showed up as
+   dead white space under the paragraph on a card that was not expanded. */
+.segment-person-body .text-link {
+  margin-top: 0;
+  padding-top: 0;
+  max-height: 0;
+  overflow: hidden;
+  font-size: 13px;
+  opacity: 0;
+  transform: translateY(6px);
+  pointer-events: none;
+  transition: max-height 0.42s cubic-bezier(0.22, 0.8, 0.28, 1), padding-top 0.42s cubic-bezier(0.22, 0.8, 0.28, 1), opacity 0.3s ease, transform 0.3s ease;
 }
 
-.segment-detail {
-  display: grid;
-  grid-template-columns: 0.72fr 1.28fr;
-  gap: 36px;
-  padding: 32px;
-  border: 1px solid var(--line);
-  border-radius: 22px;
-  background: var(--white);
-  scroll-margin-top: 140px;
+/* Pointer devices reveal on hover; touch devices get .is-open from main.js on tap. */
+@media (hover: hover) and (pointer: fine) {
+  .segment-person:hover .check-stack {
+    margin-top: 18px;
+    max-height: 190px;
+    opacity: 1;
+  }
+
+  .segment-person:hover .text-link,
+  .segment-person:focus-within .text-link {
+    max-height: 44px;
+    padding-top: 22px;
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+  }
 }
 
-.segment-detail:nth-child(even) {
-  background: var(--soft);
+.segment-person.is-open .check-stack {
+  margin-top: 18px;
+  max-height: 190px;
+  opacity: 1;
 }
 
-.segment-detail > div:first-child {
-  display: flex;
-  flex-direction: column;
+.segment-person.is-open .text-link {
+  max-height: 44px;
+  padding-top: 22px;
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
 }
 
-.segment-detail > div:first-child .icon {
-  width: 42px;
-  height: 42px;
-}
-
-.segment-detail h3 {
-  margin-top: 14px;
-  color: var(--navy);
-  font-size: 24px;
-}
-
-.segment-detail-copy > p {
-  font-size: 15px;
-}
-
-.segment-detail-copy .check-stack {
-  grid-template-columns: repeat(2, 1fr);
+@media (prefers-reduced-motion: reduce) {
+  .segment-person-photo,
+  .segment-person-photo img,
+  .segment-person-body .text-link,
+  .segment-person-body .check-stack,
+  .segment-carousel-track {
+    transition: none;
+    scroll-behavior: auto;
+  }
 }
 
 .tax-focus {
@@ -3208,6 +3421,10 @@ p {
   color: #c2c5ce;
 }
 
+.table-scroll-hint {
+  display: none;
+}
+
 /* About */
 .about-story {
   display: grid;
@@ -3481,46 +3698,254 @@ p {
 
 @media (max-width: 980px) {
   .utility-bar { display: none; }
-  .site-header { top: 0; }
-  .header-main { height: 76px; }
+  .site-header { top: 0; backdrop-filter: none; -webkit-backdrop-filter: none; }
+  .header-main { height: 74px; }
   .brand { width: 150px; }
-  .mobile-toggle { display: block; margin-left: auto; }
   .header-cta { display: none; }
+
+  /* ---------- Mobile navigation: sheet + ledger + footer tray ---------- */
+  :root { --nav-top: 75px; } /* .header-main 74px + 1px .site-header border */
+
+  .mobile-toggle {
+    display: block;
+    margin-left: auto;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .mobile-toggle[aria-expanded='true'] { border-color: transparent; background-color: var(--soft); }
+
   .main-nav {
     position: fixed;
-    top: 76px;
+    top: var(--nav-top);
     right: 0;
-    bottom: 0;
     left: 0;
+    z-index: 99;
     display: none;
+    flex: 0 0 auto;
+    flex-direction: column;
     align-items: stretch;
     justify-content: flex-start;
-    gap: 4px;
-    padding: 22px 20px 40px;
+    gap: 0;
+    max-height: calc(100vh - var(--nav-top));
+    max-height: calc(100dvh - var(--nav-top));
+    padding: 2px 0 0;
     overflow-y: auto;
+    overscroll-behavior: contain;
+    border-top: 0;
+    border-radius: 0;
     background: var(--white);
+    box-shadow: 0 18px 36px -14px rgba(5, 6, 62, 0.28);
   }
-  .main-nav.open { display: flex; flex-direction: column; }
-  .nav-item { width: 100%; }
-  .nav-link, .nav-trigger { width: 100%; height: 52px; justify-content: space-between; padding-inline: 16px; font-size: 15px; }
+  .main-nav.open { display: flex; animation: navSheetIn 0.26s cubic-bezier(0.22, 0.8, 0.28, 1) both; }
+  .main-nav.is-closing { display: flex; pointer-events: none; animation: navSheetOut 0.18s ease-in both; }
+  .main-nav.is-closing > * { animation: none; }
+
+  /* Every child must keep its intrinsic height, otherwise the flex column squashes
+     the rows (tap targets down to ~26px) instead of scrolling. Declared on the
+     children too, so wrapping the rows in a scroller later cannot silently undo it. */
+  .main-nav > * { flex: 0 0 auto; }
+  .nav-item { flex: 0 0 auto; }
+  .nav-link, .nav-trigger { flex: 0 0 auto; }
+
+  .main-nav.open > * { animation: navRowIn 0.32s cubic-bezier(0.22, 0.8, 0.28, 1) backwards; }
+  .main-nav.open > *:nth-child(1) { animation-delay: 0.03s; }
+  .main-nav.open > *:nth-child(2) { animation-delay: 0.06s; }
+  .main-nav.open > *:nth-child(3) { animation-delay: 0.09s; }
+  .main-nav.open > *:nth-child(n + 4) { animation-delay: 0.12s; }
+
+  @keyframes navSheetIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: none; } }
+  @keyframes navSheetOut { to { opacity: 0; transform: translateY(-8px); } }
+  @keyframes navRowIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+  @keyframes navScrimIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes navScrimOut { to { opacity: 0; } }
+
+  body.menu-open::after,
+  body.menu-closing::after {
+    position: fixed;
+    inset: var(--nav-top) 0 0 0;
+    z-index: 90;
+    background: rgba(5, 6, 62, 0.42);
+    content: '';
+  }
+  body.menu-open::after { animation: navScrimIn 0.26s ease both; }
+  body.menu-closing::after { pointer-events: none; animation: navScrimOut 0.18s ease both; }
+
+  .nav-item { width: 100%; border-bottom: 0; }
+  .nav-item:last-of-type { border-bottom: 0; }
+
+  .nav-link,
+  .nav-trigger {
+    display: flex;
+    width: 100%;
+    height: auto;
+    min-height: 58px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 0 22px;
+    border: 0;
+    border-radius: 0;
+    color: var(--navy);
+    background-color: transparent;
+    font-family: 'Manrope', Arial, sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    transition: color 0.18s ease, background-color 0.18s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .nav-item.is-open .nav-trigger { color: var(--navy); background-color: transparent; }
+  .nav-link:hover, .nav-trigger:hover { color: var(--navy); background-color: transparent; }
+  .nav-link:active, .nav-trigger:active { background-color: rgba(5, 6, 62, 0.04); }
+
+  /* Inset hairline between every top-level row. Drawn as a background layer so the
+     same rule works on .nav-item (div) and .nav-link (flex <a>) with no extra markup. */
+  .main-nav > .nav-item + .nav-item,
+  .main-nav > .nav-link {
+    background-image: linear-gradient(var(--line), var(--line));
+    background-repeat: no-repeat;
+    background-origin: border-box;
+    background-position: 22px 0;
+    background-size: calc(100% - 44px) 1px;
+  }
+
+  /* Current page = orange rail + heavier navy label (never colour alone, and never
+     ::after — styles.css sets .nav-link.active::after { display:none !important;
+     content:none !important } globally, so future decoration must use ::before). */
+  .nav-link.active,
+  .nav-trigger.active,
+  .nav-item.is-open .nav-trigger.active {
+    padding-left: 19px;
+    border-left: 3px solid var(--orange);
+    color: var(--navy);
+    background-color: transparent;
+    font-weight: 800;
+  }
   .nav-link.active::after, .nav-trigger.active::after { display: none; }
+
+  .nav-chevron {
+    width: 28px;
+    height: 28px;
+    flex: 0 0 auto;
+    padding: 6px;
+    border-radius: 50%;
+    color: var(--navy);
+    background: var(--soft);
+    transition: transform 0.28s cubic-bezier(0.22, 0.8, 0.28, 1), background-color 0.2s ease;
+  }
+  .nav-chevron path { stroke-width: 2.1; }
+  .nav-item.is-open .nav-chevron { background: rgba(255, 112, 20, 0.14); transform: rotate(180deg); }
+
+  /* Submenu uses the same 0fr -> 1fr accordion as .faq-answer elsewhere in this file. */
   .mega-menu {
     position: static;
+    display: grid;
+    grid-template-rows: 0fr;
     width: 100%;
-    display: none;
-    margin-top: 4px;
-    padding: 12px;
-    border-radius: 18px;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
     box-shadow: none;
     opacity: 1;
-    visibility: visible;
-    transform: none;
+    visibility: hidden;
+    background: transparent;
+    transition: grid-template-rows 0.3s cubic-bezier(0.22, 0.8, 0.28, 1), visibility 0.3s;
   }
-  .nav-item.is-open .mega-menu { display: block; transform: none; }
-  .nav-item:hover .mega-menu { display: none; }
-  .nav-item.is-open:hover .mega-menu { display: block; }
-  .mega-grid { grid-template-columns: 1fr; }
-  .mega-feature { min-height: 245px; }
+  /* Desktop hover-bridge pseudo becomes an invisible 18px tap-blocker once the menu
+     is position:static, because its containing block falls back to .nav-item. */
+  .mega-menu::before { display: none; }
+  .nav-item .mega-menu,
+  .nav-item:hover .mega-menu,
+  .nav-item.is-open .mega-menu { transform: none; }
+  .nav-item:hover .mega-menu { grid-template-rows: 0fr; visibility: hidden; }
+  .nav-item.is-open .mega-menu,
+  .nav-item.is-open:hover .mega-menu { grid-template-rows: 1fr; visibility: visible; }
+
+  .mega-grid { grid-template-columns: 1fr; gap: 0; min-height: 0; overflow: hidden; }
+  .mega-copy { padding: 0; }
+  .mega-eyebrow, .mega-copy h3, .mega-feature { display: none; }
+
+  .mega-links {
+    gap: 0;
+    margin: 0 22px 14px 34px;
+    padding-left: 16px;
+    border-left: 1px solid var(--line);
+  }
+  .mega-links a {
+    min-height: 44px;
+    justify-content: flex-start;
+    gap: 10px;
+    padding: 0;
+    border-radius: 0;
+    color: var(--muted);
+    background-color: transparent;
+    font-family: 'DM Sans', Arial, sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: -0.005em;
+    transform: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .mega-links a:hover { color: var(--muted); background-color: transparent; transform: none; }
+  .mega-links a:active { color: var(--navy); }
+  .mega-links a span { display: none; }
+  .mega-all { display: flex; color: var(--navy); font-weight: 700; }
+  .mega-all::after { content: '→'; margin-left: 6px; color: var(--orange); }
+
+  .nav-foot {
+    position: sticky;
+    bottom: 0;
+    z-index: 1;
+    display: block;
+    width: 100%;
+    margin-top: 8px;
+    padding: 16px 22px max(16px, env(safe-area-inset-bottom, 0px));
+    border-top: 1px solid var(--line);
+    background: var(--soft);
+    box-shadow: 0 -10px 18px -14px rgba(5, 6, 62, 0.3);
+  }
+  .nav-mobile-cta {
+    display: flex;
+    width: auto;
+    min-height: 52px;
+    margin: 18px 20px max(20px, env(safe-area-inset-bottom, 0px));
+    border-radius: 12px;
+    box-shadow: none;
+    font-size: 15px;
+  }
+  .nav-contact {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-top: 10px;
+  }
+  .nav-contact a {
+    display: flex;
+    min-height: 46px;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 0 6px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    color: var(--navy);
+    background: var(--white);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    transition: background-color 0.18s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .nav-contact a:active { background: var(--soft-2); }
+  .nav-contact svg { width: 15px; height: 15px; flex: 0 0 auto; color: var(--muted); }
+
+  .main-nav a:focus-visible,
+  .main-nav button:focus-visible,
+  .mobile-toggle:focus-visible {
+    outline: 2px solid var(--navy);
+    outline-offset: -3px;
+    box-shadow: inset 0 0 0 5px rgba(255, 112, 20, 0.35);
+  }
   .hero { padding-top: 58px; }
   .hero-grid, .page-hero-grid { grid-template-columns: 1fr; }
   .hero-copy, .page-hero-copy { text-align: center; }
@@ -3538,8 +3963,13 @@ p {
   .process-grid, .faq-layout, .cta-card, .tax-focus, .about-story, .contact-page-grid { grid-template-columns: 1fr; gap: 50px; }
   .cta-photo, .cta-photo-blob { display: none; }
   .cta-card-wave, .cta-card-photo { display: none; }
-  .cta-card-copy-wrap { grid-column: auto; }
+  /* .cta-card--photo-left pins the copy to grid-column 2 (specificity 0,2,0); once the card
+     collapses to a single column that leaves an empty first track + 50px gap, shoving the
+     content ~50px right. Match that specificity so the single-column reset actually wins. */
+  .cta-card-copy-wrap,
+  .cta-card--photo-left .cta-card-copy-wrap { grid-column: auto; }
   .process-copy, .contact-info { position: static; }
+  .contact-page-grid .contact-form-card { order: -1; }
   .plans-grid { grid-template-columns: 1fr; }
   .plan-card.popular { transform: none; }
   .statement-card { grid-template-columns: 70px 1fr; }
@@ -3548,15 +3978,26 @@ p {
   .statement-card--photo .statement-signature { grid-column: auto; }
   .statement-card--photo-right { grid-template-columns: 1fr 220px; }
   .statement-photo img { width: 220px; }
+  .statement-card--photo-right .statement-photo img { left: 50%; width: 220px; }
   .statement-content { padding: 40px 44px 40px 6px; }
   .footer-grid { grid-template-columns: repeat(2, 1fr); }
   .footer-brand { grid-column: 1 / -1; }
   .service-tabs-layout { grid-template-columns: 1fr; }
   .service-tab-nav { position: static; grid-template-columns: repeat(2, 1fr); }
   .service-panel-top { grid-template-columns: 1fr; }
-  .segment-detail { grid-template-columns: 1fr; }
-  .segment-index-grid { grid-template-columns: repeat(2, 1fr); }
   .about-story img { width: min(700px, 100%); margin-inline: auto; }
+}
+
+/* The global reduced-motion block zeroes animation-duration but not animation-delay,
+   so the row stagger would still hold the last rows back. Kill the delays outright. */
+@media (max-width: 980px) and (prefers-reduced-motion: reduce) {
+  .main-nav.open,
+  .main-nav.open > *,
+  .main-nav.is-closing,
+  body.menu-open::after,
+  body.menu-closing::after { animation: none; }
+  .main-nav.is-closing { display: none; }
+  .mega-menu { transition: none; }
 }
 
 @media (max-width: 720px) {
@@ -3589,13 +4030,35 @@ p {
   .note-support { right: -22px; bottom: 4px; transform-origin: right bottom; }
   .hero-bottom { margin-top: 10px; }
   .hero-segments a:not(:last-child)::after { display: none; }
-  .segments-grid, .service-grid, .segment-index-grid, .dual-experience, .about-values, .contact-options { grid-template-columns: 1fr; }
+  .segments-grid, .service-grid, .dual-experience, .about-values, .contact-options { grid-template-columns: 1fr; }
+  /* Phones start from a smaller base (78px, not 112px), so the desktop value would barely
+     move anything here. This keeps the reduction proportional on both. */
+  body[data-page="segmentos"] .page-hero + .section { padding-top: 50px; }
+  /* Phone: cards fill the viewport width and the arrows go away — swiping is the control. */
+  /* Touch has no hover, so there is no shadow to clear here — the padding/negative-margin
+     pair the desktop track needs is undone rather than carried over. */
+  .segment-carousel { margin-top: 34px; margin-bottom: 0; }
+  .segment-carousel-track { gap: 14px; padding-top: 4px; padding-bottom: 8px; }
+  .segment-carousel-btn { display: none; }
+  .segment-person { flex-basis: calc(100vw - 56px); height: 486px; }
+  /* Phone cards are ~30px narrower than desktop ones, so the copy needs a touch more room
+     than the 26px gutter left it: at 19px the longest title still clears a 360px screen on
+     one line, which is what keeps every card's white block starting at the same height. */
+  .segment-person-body { padding: 24px 22px 26px; }
+  .segment-person-body h3 { font-size: 19px; }
   .segment-card.featured { min-height: 250px; }
   .segment-card.featured h3 { font-size: 24px; }
   .feature-grid { grid-template-columns: 1fr; }
   .feature-card.featured { grid-column: auto; min-height: 460px; }
   .process-grid { gap: 44px; }
   .process-step { grid-template-columns: 48px 1fr; gap: 16px; }
+  /* Phone: the step number sat flush against the left edge with a wide dead gap before the
+     heading. Right-align it inside its track, backed off 10px so it sits just clear of the
+     text instead of hard against it. Applies wherever .process-step is used (home + serviços). */
+  .process-step > span { padding-right: 10px; text-align: right; }
+  /* Phone: drop the white outbound button from the process intro (home + serviços). The step
+     list right below already carries the section, and the page CTA repeats the same link. */
+  .process-copy .btn-white { display: none; }
   .statement-card { display: block; padding: 36px 26px; }
   .statement-mark { font-size: 78px; }
   .statement-card blockquote { margin-top: 5px; }
@@ -3605,10 +4068,38 @@ p {
   .statement-card--photo .statement-card-bg { border-radius: 24px; }
   .statement-photo { height: 236px; }
   .statement-photo img { width: 200px; }
+  .statement-card--photo-right .statement-photo img { left: 50%; width: 130px; }
   .statement-content { padding: 22px 26px 36px; text-align: center; align-items: center; }
   .statement-content .statement-mark { font-size: 64px; }
   .statement-content blockquote { margin-top: 0; }
+  /* Home, phone: the testimonial photo stops being a stacked block and becomes the card's
+     own background, washed with navy so the quote stays legible on top of it. */
+  body[data-page="home"] .statement-card--photo { grid-template-rows: auto; min-height: 380px; align-content: center; }
+  body[data-page="home"] .statement-card--photo .statement-photo { display: none; }
+  body[data-page="home"] .statement-card--photo .statement-card-bg {
+    background-image: linear-gradient(rgba(5, 6, 62, 0.86), rgba(5, 6, 62, 0.92)), url('../img/mulher.webp');
+    background-repeat: no-repeat, no-repeat;
+    background-position: center center, center 14%;
+    background-size: cover, cover;
+  }
+  /* The orange disc reads as an accent over flat navy, but over the photo it lands on the
+     subject's face and hides the (also orange) quote mark. Drop it for this card only. */
+  body[data-page="home"] .statement-card--photo .statement-card-bg::after { content: none; }
+  body[data-page="home"] .statement-card--photo .statement-content { padding: 44px 26px 48px; }
   .cta-card { padding: 38px 22px; border-radius: 24px; }
+  /* Phone: the navy blocks bleed to the screen edges instead of floating as inset cards.
+     Both parent sections are already full-width (padding: X 0), so dropping the .container
+     width/centering is enough — no 100vw trick, which would fight the scrollbar. */
+  .statement-card,
+  .cta-card { width: 100%; margin-inline: 0; border-radius: 0; }
+  .statement-card--photo,
+  .statement-card--photo .statement-card-bg,
+  .statement-card-bg { border-radius: 0; }
+  /* Same treatment for the navy panels that sit as children INSIDE a .container grid
+     (page hero card, segmentos' analysis panel). The container is width:calc(100% - 28px)
+     centered at this breakpoint, so -14px per side lands them exactly on the screen edge. */
+  .page-hero-card,
+  .tax-focus-visual { margin-inline: -14px; border-radius: 0; }
   .form-grid { grid-template-columns: 1fr; }
   .footer-grid { grid-template-columns: 1fr 1fr; gap: 35px 20px; }
   .footer-brand { grid-column: 1 / -1; }
@@ -3616,18 +4107,61 @@ p {
   .floating-contact { width: 52px; height: 52px; justify-content: center; padding: 0; }
   .floating-contact span { display: none; }
   .floating-contact i { background: transparent; color: var(--white); }
+  .cta-section { padding-bottom: 70px; }
+  .site-footer { padding-bottom: 86px; }
+  .table-scroll-hint { display: block; margin: 0 auto 14px; color: var(--muted); font-size: 12px; text-align: center; }
+  .comparison-table { min-width: 560px; }
+  .comparison-table th, .comparison-table td { padding: 14px 12px; font-size: 12px; }
+  .comparison-table th:first-child, .comparison-table td:first-child { min-width: 150px; }
   .page-hero { padding: 55px 0 60px; }
   .page-hero-copy h1 { font-size: clamp(2.7rem, 13vw, 4.2rem); }
   .page-hero-card { min-height: 350px; }
   .page-hero-stat-grid { width: calc(100% - 36px); gap: 10px; }
   .page-stat { min-height: 120px; padding: 16px; }
   .page-stat strong { font-size: 18px; }
-  .service-tab-nav { display: flex; overflow-x: auto; padding: 10px; }
-  .service-tab-button { min-width: 210px; }
+  /* Phone: the tab picker stops being a boxed card of navy pills and becomes a full-bleed
+     underline tab strip. Tabs size to their own text so the next one peeks into view, and a
+     right-edge fade signals the row keeps going. */
+  .service-tab-nav {
+    display: flex;
+    gap: 0;
+    width: auto;
+    margin-inline: -14px;
+    padding: 0 44px 0 14px;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x proximity;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 46px), transparent);
+    mask-image: linear-gradient(to right, #000 calc(100% - 46px), transparent);
+  }
+  .service-tab-nav::-webkit-scrollbar { display: none; }
+  .service-tab-button {
+    flex: 0 0 auto;
+    width: auto;
+    min-width: 0;
+    justify-content: flex-start;
+    gap: 0;
+    padding: 13px 15px;
+    border-radius: 0;
+    border-bottom: 2px solid var(--line);
+    white-space: nowrap;
+    scroll-snap-align: start;
+    font-size: 15.5px;
+    transition: color 0.2s ease, border-color 0.2s ease;
+  }
+  .service-tab-button span:last-child { display: none; }
+  .service-tab-button.active {
+    color: var(--navy);
+    background: transparent;
+    border-bottom-color: var(--orange);
+  }
+  /* Scroll affordance is the right-edge fade plus the next tab cut mid-label — no chevron. */
   .service-panel { padding: 28px 20px; }
   .service-panel-bottom { grid-template-columns: 1fr; }
-  .segment-detail { padding: 30px 22px; }
-  .segment-detail-copy .check-stack { grid-template-columns: 1fr; }
   .tax-card-stack { inset: 28px; }
   .tax-card:nth-child(2) { transform: translateX(10px); }
   .timeline::before { left: 28px; }
@@ -3636,6 +4170,18 @@ p {
   .timeline-content { min-height: 0; padding: 24px 20px; }
   .experience-card { min-height: 260px; padding: 24px 20px; }
   .contact-form-card { padding: 28px 20px; }
+  .lead-form .btn-full { padding-inline: 14px; font-size: 14px; gap: 6px; }
+  .legal-content li { padding-left: 16px; position: relative; }
+  .legal-content li::before { content: '•'; position: absolute; left: 0; color: var(--orange); font-weight: 700; }
+  /* Home, phone only: trim hero/FAQ ornamentation that adds noise on a narrow screen. */
+  body[data-page="home"] .eyebrow span { display: none; }
+  body[data-page="home"] .hero-actions .btn-primary > span { display: none; }
+  body[data-page="home"] .faq-intro > p,
+  body[data-page="home"] .faq-intro > .text-link { display: none; }
+  .platform-tabs { flex-direction: column; flex-wrap: nowrap; border-radius: 22px; margin-bottom: 40px; }
+  .platform-tab { width: 100%; }
+  /* Phones already run on 78px section padding, so there is nothing to trim back here. */
+  .platform-showcase { margin-bottom: 0; }
 }
 
 @media (max-width: 480px) {
@@ -3646,6 +4192,17 @@ p {
   .page-hero-card { min-height: 510px; }
   .hero-proof { display: grid; justify-items: start; }
   .service-card { min-height: 290px; }
+}
+
+/* Smallest phones (iPhone SE, folded devices). At 320px the segment card was down to 218px
+   of inner width: the longest title wrapped and the longest descriptions ran past the
+   four-line clamp and got cut mid-sentence. Trading 16px of the next-card peek for card
+   width, plus one step down on both type sizes, puts every title back on one line and every
+   description back inside four lines — so the white blocks line up here too. */
+@media (max-width: 359px) {
+  .segment-person { flex-basis: calc(100vw - 40px); }
+  .segment-person-body h3 { font-size: 17px; }
+  .segment-person-body > p { font-size: 13px; }
 }
 
 /* Entry diagnostic modal */
@@ -4302,6 +4859,16 @@ body[data-page="home"] .play {
   font-size: 10px;
 }
 
+/* Lighter than the site-wide .btn-primary (0 14px 30px / .26). Sitting on the hero's pale
+   background the full-strength shadow read as a second orange shape under the button. */
+body[data-page="home"] .hero .btn-primary {
+  box-shadow: 0 8px 18px rgba(255, 112, 20, 0.18);
+}
+
+body[data-page="home"] .hero .btn-primary:hover {
+  box-shadow: 0 12px 24px rgba(255, 112, 20, 0.24);
+}
+
 body[data-page="home"] .hero-proof {
   display: flex;
   align-items: center;
@@ -4702,6 +5269,100 @@ body[data-page="home"] .orbit-two {
   border-style: dashed;
 }
 
+/* Boot-up sequence for the hero mockup: the panel arrives, its cards settle, the chart draws
+   itself, then the two floating alerts land. Everything hangs off `.visible`, which the
+   reveal observer adds the moment the hero is on screen — on load, in practice — and every
+   animation uses `backwards` fill so the hidden from-state exists only during that
+   animation's own delay. If the class never arrives (no JS, no IntersectionObserver) the
+   mockup just renders finished, with nothing stuck invisible. */
+@keyframes heroPanelRise {
+  from { opacity: 0; transform: translateY(14px); }
+}
+
+@keyframes heroFadeIn {
+  from { opacity: 0; }
+}
+
+@keyframes heroDrawLine {
+  from { stroke-dashoffset: 1; }
+}
+
+@keyframes heroBarGrow {
+  from { transform: scaleY(0); }
+}
+
+@keyframes heroCardLand {
+  from { opacity: 0; transform: translateY(12px) scale(0.94); }
+}
+
+@keyframes heroOnlinePulse {
+  0% { box-shadow: 0 0 0 0 rgba(75, 198, 117, 0.5); }
+  70%, 100% { box-shadow: 0 0 0 7px rgba(75, 198, 117, 0); }
+}
+
+body[data-page="home"] .hero-visual.visible .metric {
+  animation: heroPanelRise 0.5s cubic-bezier(0.22, 0.8, 0.28, 1) backwards;
+}
+
+body[data-page="home"] .hero-visual.visible .metric:nth-child(1) { animation-delay: 0.34s; }
+body[data-page="home"] .hero-visual.visible .metric:nth-child(2) { animation-delay: 0.44s; }
+body[data-page="home"] .hero-visual.visible .metric:nth-child(3) { animation-delay: 0.54s; }
+
+/* The bars are the backdrop behind the line, so they fill in first and read as the data
+   loading; the line is then drawn on top of an already-populated chart. */
+body[data-page="home"] .hero-visual.visible .bars i {
+  transform-origin: bottom;
+  animation: heroBarGrow 0.55s cubic-bezier(0.22, 0.8, 0.28, 1) backwards;
+}
+
+body[data-page="home"] .hero-visual.visible .bars i:nth-child(1) { animation-delay: 0.62s; }
+body[data-page="home"] .hero-visual.visible .bars i:nth-child(2) { animation-delay: 0.69s; }
+body[data-page="home"] .hero-visual.visible .bars i:nth-child(3) { animation-delay: 0.76s; }
+body[data-page="home"] .hero-visual.visible .bars i:nth-child(4) { animation-delay: 0.83s; }
+body[data-page="home"] .hero-visual.visible .bars i:nth-child(5) { animation-delay: 0.90s; }
+body[data-page="home"] .hero-visual.visible .bars i:nth-child(6) { animation-delay: 0.97s; }
+
+/* pathLength="1" on the path (set in the markup) normalises the dash units to the length of
+   the line itself, so 1 is always the whole stroke — without it the numbers would have to
+   track the viewBox, which preserveAspectRatio="none" stretches. */
+body[data-page="home"] .hero-visual.visible .line-chart .line {
+  stroke-dasharray: 1;
+  animation: heroDrawLine 1.15s cubic-bezier(0.36, 0, 0.2, 1) 0.8s backwards;
+}
+
+/* Trails the stroke so the fill appears to pour in under a line that is already there. */
+body[data-page="home"] .hero-visual.visible .line-chart .area {
+  animation: heroFadeIn 0.8s ease 1.15s backwards;
+}
+
+body[data-page="home"] .hero-visual.visible .tax-card {
+  animation: heroCardLand 0.55s cubic-bezier(0.22, 0.8, 0.28, 1) 1.55s backwards;
+}
+
+body[data-page="home"] .hero-visual.visible .support-card {
+  animation: heroCardLand 0.55s cubic-bezier(0.22, 0.8, 0.28, 1) 1.75s backwards;
+}
+
+/* Starts once the sequence has settled and then just keeps breathing — the one piece of
+   motion that stays, because "Online agora" is the only claim on the panel that is live. */
+body[data-page="home"] .hero-visual.visible .online {
+  animation: heroOnlinePulse 2.6s ease-out 2.3s infinite;
+}
+
+/* The global reduced-motion rule collapses animation-duration but not animation-delay, which
+   with `backwards` fill would leave these parts invisible for up to 2s. Cancel them outright
+   so the mockup is simply there. */
+@media (prefers-reduced-motion: reduce) {
+  body[data-page="home"] .hero-visual.visible .metric,
+  body[data-page="home"] .hero-visual.visible .bars i,
+  body[data-page="home"] .hero-visual.visible .line-chart .line,
+  body[data-page="home"] .hero-visual.visible .line-chart .area,
+  body[data-page="home"] .hero-visual.visible .floating-card,
+  body[data-page="home"] .hero-visual.visible .online {
+    animation: none;
+  }
+}
+
 body[data-page="home"] .trust-strip {
   position: relative;
   z-index: 1;
@@ -4853,17 +5514,7 @@ body[data-page="home"] .trust-items i {
   }
 
   body[data-page="home"] .floating-card {
-    transform: scale(0.8);
-  }
-
-  body[data-page="home"] .tax-card {
-    top: 90px;
-    left: -25px;
-  }
-
-  body[data-page="home"] .support-card {
-    right: -20px;
-    bottom: 0;
+    display: none;
   }
 
   body[data-page="home"] .trust-items {
