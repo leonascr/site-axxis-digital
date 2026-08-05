@@ -3660,6 +3660,515 @@ body[data-page="segmentos"] .page-hero + .section {
   font-size: 14px;
 }
 
+/* Conteúdos (blog) */
+/* Everything here leans on the primitives that already exist — .container, .section,
+   .section-heading, .kicker, .tag, .text-link, .btn, .page-hero, .cta-card — so only the
+   pieces that genuinely had no equivalent are declared: the category chips, the post cards
+   and the long-form body. .legal-content stops at h2/p/ul and has no figure, quote, callout,
+   ordered list or divider, and its list bullet only appears below 720px, so an article body
+   could not be built on top of it without changing the legal pages too. */
+
+/* The page hero already ends with 84px of its own padding, so the full 112px here put 196px
+   between the hero copy and the first row of cards. Same fix, same number, as the segments
+   page — scoped so the other page-hero layouts are untouched. */
+body[data-page="conteudos"] .page-hero + .section {
+  padding-top: 72px;
+}
+
+/* Article hero. The shared .page-hero h1 tops out at 5.3rem, which is right for a two-word
+   page title ("Planos.") and wrong for a sentence-length headline: at 5.3rem the longest
+   mock title ran to five lines on a 1440 screen. */
+.page-hero--article .page-hero-copy h1 {
+  max-width: 880px;
+  font-size: clamp(2.2rem, 3.6vw, 3.4rem);
+}
+
+.page-hero--article .page-hero-copy > p {
+  max-width: 720px;
+}
+
+.article-byline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px;
+  margin-top: 30px;
+}
+
+.article-byline img {
+  width: 46px;
+  height: 46px;
+  flex: 0 0 auto;
+  padding: 8px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: var(--white);
+  object-fit: contain;
+}
+
+.article-byline-name {
+  display: block;
+  color: var(--navy);
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.article-byline-role {
+  display: block;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+/* Dot-separated run of date / reading time. The separator is a pseudo-element on every span
+   after the first, so the author can add or drop a field without touching punctuation.
+   Shared by the article hero, the featured card and the grid cards. */
+.article-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.article-meta span + span::before {
+  margin-right: 8px;
+  color: #c4c8d4;
+  content: '•';
+}
+
+.article-cover {
+  max-width: 900px;
+  margin: 0 auto 46px;
+}
+
+.article-cover img {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 30px;
+  box-shadow: var(--shadow-lg);
+  object-fit: cover;
+}
+
+.article-cover figcaption {
+  margin-top: 14px;
+  color: #878b98;
+  text-align: center;
+  font-size: 12px;
+}
+
+/* Long-form body. Deliberately NOT a .reveal target: the observer fires at 12% of the
+   element's own height, and an article taller than roughly eight viewports never reaches it,
+   so the entire text would sit at opacity 0 with nothing in the console. Keep .reveal on the
+   short blocks around it — hero copy, cover, related cards. 760px matches .legal-content:
+   about 75 characters per line at 16px. */
+.article-body {
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.article-body > *:first-child {
+  margin-top: 0;
+}
+
+.article-body p {
+  margin-top: 18px;
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1.75;
+}
+
+.article-body h2 {
+  margin-top: 52px;
+  color: var(--navy);
+  font-size: 27px;
+}
+
+.article-body h3 {
+  margin-top: 34px;
+  color: var(--navy);
+  font-size: 19px;
+}
+
+.article-body strong {
+  color: var(--navy);
+}
+
+.article-body a {
+  color: var(--orange);
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+.article-body ul,
+.article-body ol {
+  display: grid;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.article-body li {
+  position: relative;
+  padding-left: 22px;
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1.7;
+}
+
+/* `ul { list-style: none }` is global, so every list carries its own marker. Same 6px orange
+   dot as .check-stack; the 11px top offset centres it on the first line of a wrapped item
+   instead of hanging it off the cap height. */
+.article-body ul > li::before {
+  position: absolute;
+  left: 0;
+  top: 11px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--orange);
+  content: '';
+}
+
+.article-body ol {
+  counter-reset: article-step;
+}
+
+.article-body ol > li {
+  padding-left: 32px;
+  counter-increment: article-step;
+}
+
+.article-body ol > li::before {
+  position: absolute;
+  left: 0;
+  top: 1px;
+  color: var(--orange);
+  font-family: 'Manrope', Arial, sans-serif;
+  font-size: 15px;
+  font-weight: 800;
+  content: counter(article-step) '.';
+}
+
+.article-quote {
+  margin-top: 42px;
+  padding-left: 26px;
+  border-left: 3px solid var(--orange);
+  color: var(--navy);
+  font-family: 'Manrope', Arial, sans-serif;
+  font-size: 21px;
+  font-weight: 700;
+  line-height: 1.35;
+  letter-spacing: -0.02em;
+}
+
+.article-quote p {
+  margin-top: 0;
+  color: inherit;
+  font: inherit;
+}
+
+.article-quote cite {
+  display: block;
+  margin-top: 12px;
+  color: var(--muted);
+  font-family: 'DM Sans', Arial, sans-serif;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 600;
+  letter-spacing: 0;
+}
+
+.article-figure {
+  margin-top: 42px;
+}
+
+.article-figure img {
+  width: 100%;
+  border-radius: 22px;
+  object-fit: cover;
+}
+
+.article-figure figcaption {
+  margin-top: 12px;
+  color: #878b98;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+/* Editorial callout. Orange tint rather than a bordered white card, because the body already
+   sits on white and a white box with a --line border read as an empty form field. #fff6ef is
+   the .icon box tint (#fff1e7) opened one step, so 15px body text still clears contrast. */
+.article-callout {
+  margin-top: 42px;
+  padding: 26px 28px;
+  border: 1px solid rgba(255, 112, 20, 0.22);
+  border-radius: 18px;
+  background: #fff6ef;
+}
+
+.article-callout .kicker {
+  margin-bottom: 6px;
+}
+
+.article-callout p {
+  margin-top: 10px;
+  color: #4e5261;
+  font-size: 15px;
+}
+
+.article-divider {
+  height: 1px;
+  margin: 50px 0 0;
+  border: 0;
+  background: var(--line);
+}
+
+/* Share row: plain links, no JS. wa.me and the LinkedIn share endpoint take the URL as a
+   query parameter, so nothing here needs the page's own address at runtime. */
+.article-share {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-top: 34px;
+}
+
+.article-share > span {
+  margin-right: 4px;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.article-share a {
+  display: inline-flex;
+  min-height: 38px;
+  align-items: center;
+  padding: 0 16px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: #4e5261;
+  background: var(--white);
+  font-size: 13px;
+  font-weight: 700;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.article-share a:hover {
+  border-color: rgba(255, 112, 20, 0.4);
+  color: var(--orange);
+}
+
+.article-author {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-top: 50px;
+  padding: 26px 28px;
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  background: var(--white);
+  box-shadow: var(--shadow-sm);
+}
+
+.article-author img {
+  width: 64px;
+  height: 64px;
+  flex: 0 0 auto;
+  padding: 11px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: var(--soft);
+  object-fit: contain;
+}
+
+.article-author h3 {
+  color: var(--navy);
+  font-size: 18px;
+}
+
+.article-author p {
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+/* Category chips. Real links to the category pages, not a JS filter: a hidden card never
+   intersects, and the reveal observer runs once and unobserves, so anything filtered out and
+   brought back would be stuck at opacity 0. A page per category is also the only version
+   that gets its own indexable URL. */
+.blog-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 46px;
+}
+
+.blog-chip {
+  display: inline-flex;
+  min-height: 38px;
+  align-items: center;
+  padding: 0 16px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: #4e5261;
+  background: var(--white);
+  font-size: 13px;
+  font-weight: 700;
+  transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+}
+
+.blog-chip:hover {
+  border-color: rgba(255, 112, 20, 0.4);
+  color: var(--orange);
+}
+
+/* Current category. aria-current="page" carries the same state for assistive tech, so the
+   class only has to do the paint — never colour alone. */
+.blog-chip.is-active {
+  border-color: transparent;
+  color: var(--white);
+  background: var(--navy);
+}
+
+.blog-featured {
+  display: grid;
+  grid-template-columns: 1fr 0.92fr;
+  align-items: center;
+  gap: 44px;
+  padding: 30px;
+  border: 1px solid var(--line);
+  border-radius: 30px;
+  background: var(--white);
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+/* No translateY here, unlike .blog-card: at this size the 6px lift reads as the whole page
+   jumping rather than a card responding. */
+.blog-featured:hover {
+  border-color: rgba(255, 112, 20, 0.35);
+  box-shadow: var(--shadow-md);
+}
+
+.blog-featured-copy {
+  padding: 14px 8px 14px 22px;
+}
+
+.blog-featured-copy .tag {
+  margin-bottom: 18px;
+}
+
+.blog-featured h2 {
+  color: var(--navy);
+  font-size: clamp(1.9rem, 2.6vw, 2.6rem);
+}
+
+.blog-featured-copy > p {
+  margin-top: 16px;
+  font-size: 16px;
+}
+
+.blog-featured .article-meta {
+  margin-top: 22px;
+}
+
+.blog-featured .text-link {
+  margin-top: 22px;
+}
+
+.blog-featured:hover .text-link::after {
+  transform: translateX(5px);
+}
+
+.blog-featured-media img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: 22px;
+  object-fit: cover;
+}
+
+/* Fixed three-column count, like every other grid in this file — no auto-fit/minmax. */
+.blog-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  margin-top: 50px;
+}
+
+.blog-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 18px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  background: var(--white);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.blog-card:hover {
+  border-color: rgba(255, 112, 20, 0.35);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-6px);
+}
+
+.blog-card-media img {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  border-radius: 16px;
+  object-fit: cover;
+}
+
+.blog-card-body {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 10px 8px;
+}
+
+.blog-card .tag {
+  align-self: flex-start;
+}
+
+.blog-card h3 {
+  margin-top: 16px;
+  color: var(--navy);
+  font-size: 20px;
+}
+
+/* -webkit-line-clamp on its own does not line the cards up: min-height (3 lines x the 1.6
+   body line-height) is what keeps the meta row on the same baseline across a row when one
+   summary is two lines and the next is three. */
+.blog-card-body > p {
+  min-height: 4.8em;
+  display: -webkit-box;
+  margin-top: 12px;
+  overflow: hidden;
+  font-size: 14px;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
+.blog-card .article-meta {
+  margin-top: auto;
+  padding-top: 20px;
+}
+
+.blog-card .text-link {
+  margin-top: 14px;
+  font-size: 14px;
+}
+
+.blog-card:hover .text-link::after {
+  transform: translateX(5px);
+}
+
+
 /* Reveal */
 .reveal {
   opacity: 0;
@@ -3694,6 +4203,8 @@ body[data-page="segmentos"] .page-hero + .section {
   .services-preview-photo { display: none; }
   .service-stack { flex-wrap: wrap; gap: 18px; }
   .service-stack .service-card { flex: 1 1 240px; width: auto; margin-right: 0; }
+  .blog-featured { gap: 32px; }
+  .blog-featured-copy { padding: 10px 4px 10px 14px; }
 }
 
 @media (max-width: 980px) {
@@ -3986,6 +4497,16 @@ body[data-page="segmentos"] .page-hero + .section {
   .service-tab-nav { position: static; grid-template-columns: repeat(2, 1fr); }
   .service-panel-top { grid-template-columns: 1fr; }
   .about-story img { width: min(700px, 100%); margin-inline: auto; }
+  .blog-grid { grid-template-columns: repeat(2, 1fr); }
+  .blog-featured { grid-template-columns: 1fr; gap: 26px; padding: 20px; }
+  .blog-featured-media { order: -1; }
+  .blog-featured-copy { padding: 6px 10px 14px; }
+  .page-hero--article .page-hero-copy h1 { font-size: clamp(2.1rem, 4.8vw, 2.9rem); }
+  /* .page-hero-copy goes text-align:center at this width, so the two flex rows in the byline
+     have to be re-centred by hand — text-align does not move flex items. Scoped to the hero:
+     the same .article-meta also lives inside the cards, which stay left-aligned. */
+  .page-hero--article .article-byline { justify-content: center; }
+  .page-hero--article .article-meta { justify-content: center; }
 }
 
 /* The global reduced-motion block zeroes animation-duration but not animation-delay,
@@ -4182,6 +4703,18 @@ body[data-page="segmentos"] .page-hero + .section {
   .platform-tab { width: 100%; }
   /* Phones already run on 78px section padding, so there is nothing to trim back here. */
   .platform-showcase { margin-bottom: 0; }
+  .blog-grid { grid-template-columns: 1fr; }
+  .blog-filter { gap: 8px; margin-bottom: 34px; }
+  .blog-chip { min-height: 34px; padding: 0 13px; font-size: 12px; }
+  body[data-page="conteudos"] .page-hero + .section { padding-top: 50px; }
+  .article-cover { margin-bottom: 34px; }
+  .article-cover img { border-radius: 20px; }
+  .article-body h2 { margin-top: 40px; font-size: 23px; }
+  .article-body h3 { margin-top: 28px; font-size: 18px; }
+  .article-quote { margin-top: 34px; padding-left: 18px; font-size: 19px; }
+  .article-figure img { border-radius: 16px; }
+  .article-callout { padding: 22px; }
+  .article-author { flex-direction: column; align-items: flex-start; gap: 16px; padding: 22px; }
 }
 
 @media (max-width: 480px) {
@@ -4192,6 +4725,11 @@ body[data-page="segmentos"] .page-hero + .section {
   .page-hero-card { min-height: 510px; }
   .hero-proof { display: grid; justify-items: start; }
   .service-card { min-height: 290px; }
+  .blog-card h3 { font-size: 18px; }
+  .blog-featured h2 { font-size: 1.7rem; }
+  .article-body p, .article-body li { font-size: 15px; }
+  .article-share { gap: 8px; }
+  .article-share a { padding: 0 13px; font-size: 12px; }
 }
 
 /* Smallest phones (iPhone SE, folded devices). At 320px the segment card was down to 218px

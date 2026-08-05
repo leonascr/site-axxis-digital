@@ -21,10 +21,25 @@ const MIME_TYPES = {
   '.webp': 'image/webp',
   '.woff': 'font/woff',
   '.woff2': 'font/woff2',
+  // Sem estas duas, sitemap.xml e robots.txt saíam como application/octet-stream — os
+  // rastreadores não os liam, o que prejudicava a indexação do site inteiro, não só do blog.
+  '.xml': 'application/xml; charset=utf-8',
+  '.txt': 'text/plain; charset=utf-8',
 };
 
 const server = http.createServer((req, res) => {
-  const urlPath = decodeURIComponent(req.url.split('?')[0]);
+  // decodeURIComponent lança URIError em qualquer sequência percent malformada (ex.: "/%").
+  // Como isto acontece dentro do handler, a exceção não capturada derrubava o processo
+  // inteiro — um único pedido de um bot tirava o site do ar até o container reiniciar.
+  let urlPath;
+  try {
+    urlPath = decodeURIComponent(req.url.split('?')[0]);
+  } catch (err) {
+    res.writeHead(400, { 'Content-Type': 'text/plain; charset=utf-8' });
+    res.end('Requisição inválida');
+    return;
+  }
+
   let filePath = path.join(ROOT, urlPath);
 
   if (urlPath.endsWith('/')) {
