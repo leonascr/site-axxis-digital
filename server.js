@@ -24,7 +24,18 @@ const MIME_TYPES = {
 };
 
 const server = http.createServer((req, res) => {
-  const urlPath = decodeURIComponent(req.url.split('?')[0]);
+  // decodeURIComponent lança URIError em qualquer sequência percent malformada (ex.: "/%").
+  // Como isto acontece dentro do handler, a exceção não capturada derrubava o processo
+  // inteiro: um único pedido de um bot tirava o site do ar até o container reiniciar.
+  let urlPath;
+  try {
+    urlPath = decodeURIComponent(req.url.split('?')[0]);
+  } catch (err) {
+    res.writeHead(400, { 'Content-Type': 'text/plain; charset=utf-8' });
+    res.end('Requisição inválida');
+    return;
+  }
+
   let filePath = path.join(ROOT, urlPath);
 
   if (urlPath.endsWith('/')) {
