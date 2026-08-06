@@ -3,254 +3,454 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Em construção | Axxis Contabilidade Digital</title>
-  <meta name="description" content="O site da Axxis Contabilidade Digital está em atualização. Fale com a nossa equipe pelo e-mail ou telefone.">
-  <!-- Holding page: keep it out of the index so it never replaces the real site in search. -->
-  <meta name="robots" content="noindex, follow">
+  <meta name="description" content="Contabilidade digital para prestadores de serviços, com atendimento humano, organização e visão para crescer.">
   <meta name="theme-color" content="#05063e">
+  <title>Axxis Contabilidade Digital | Prestadores de Serviços</title>
+  <link rel="canonical" href="https://axxiscontabilidadedigital.com.br/">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:site_name" content="Axxis Contabilidade Digital">
+  <meta property="og:title" content="Axxis Contabilidade Digital | Prestadores de Serviços">
+  <meta property="og:description" content="Contabilidade digital para prestadores de serviços, com atendimento humano, organização e visão para crescer.">
+  <meta property="og:url" content="https://axxiscontabilidadedigital.com.br/">
+  <meta property="og:image" content="https://axxiscontabilidadedigital.com.br/assets/img/og-cover.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Axxis Contabilidade Digital | Prestadores de Serviços">
+  <meta name="twitter:description" content="Contabilidade digital para prestadores de serviços, com atendimento humano, organização e visão para crescer.">
+  <meta name="twitter:image" content="https://axxiscontabilidadedigital.com.br/assets/img/og-cover.jpg">
   <link rel="icon" href="assets/img/logo-xx.png" type="image/png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap">
-  <style>
-    :root {
-      --navy: #05063e;
-      --navy-2: #111453;
-      --orange: #ff7014;
-      --white: #ffffff;
+  <link rel="stylesheet" href="assets/css/styles.css?v=49">
+<script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "AccountingService",
+  "name": "Axxis Contabilidade Digital",
+  "alternateName": "Axxis",
+  "url": "https://axxiscontabilidadedigital.com.br/",
+  "logo": "https://axxiscontabilidadedigital.com.br/assets/img/logo-axxis.png",
+  "image": "https://axxiscontabilidadedigital.com.br/assets/img/og-cover.jpg",
+  "description": "Contabilidade digital para prestadores de serviços, com atendimento humano, organização e visão para crescer.",
+  "taxID": "33.354.692/0001-25",
+  "areaServed": "BR",
+  "telephone": "+55-61-98188-2247",
+  "email": "comercial@grupoaxxis.com.br",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Ed. Connect Towers, QS 1, Rua 212, Bloco D, 8º andar, sala 804",
+    "addressLocality": "Águas Claras, Brasília",
+    "addressRegion": "DF",
+    "postalCode": "71950-550",
+    "addressCountry": "BR"
+  },
+  "sameAs": [
+    "https://www.instagram.com/axxiscontabilidade",
+    "https://www.linkedin.com/company/axxis-contabilidade"
+  ]
+}</script>
+<script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "A Axxis atende somente prestadores de serviços?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "O foco principal do site está em empresas e profissionais que vendem serviços. A equipe pode avaliar operações próximas a esse perfil e confirmar o melhor formato de atendimento."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Como funciona a troca de contador?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A Axxis orienta os documentos, organiza a entrada da empresa e acompanha a transição para reduzir ruído na rotina. O escopo final depende do cenário atual da empresa."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "O atendimento é realmente humano?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Sim. A tecnologia centraliza dados, documentos e tarefas, enquanto o contato e as orientações são conduzidos por profissionais da equipe."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Vocês ajudam a avaliar o enquadramento tributário?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A proposta é analisar a realidade da operação e orientar o enquadramento dentro das possibilidades aplicáveis, considerando atividade, faturamento, estrutura e demais informações da empresa."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Os planos têm preço fixo?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Nesta versão, os planos representam níveis de acompanhamento. A proposta final pode variar conforme regime, volume de notas, folha, quantidade de sócios e complexidade da operação."
+      }
     }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      min-height: 100vh;
-      min-height: 100svh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 40px 22px;
-      overflow-x: hidden;
-      color: #c8cbdd;
-      background: var(--navy);
-      font-family: 'DM Sans', Arial, sans-serif;
-      font-size: 16px;
-      line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    /* Same orange rings the site's hero uses, so the holding page reads as the same brand
-       rather than a generic maintenance screen. Purely decorative and non-interactive. */
-    .orbit {
-      position: fixed;
-      z-index: 0;
-      border: 2px solid rgba(255, 112, 20, 0.22);
-      border-radius: 50%;
-      pointer-events: none;
-    }
-
-    .orbit-one { top: -180px; right: -170px; width: 560px; height: 560px; }
-    .orbit-two { bottom: -220px; left: -190px; width: 620px; height: 620px; border-style: dashed; }
-
-    .glow {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      z-index: 0;
-      width: 900px;
-      height: 900px;
-      transform: translate(-50%, -50%);
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(255, 112, 20, 0.13) 0%, rgba(255, 112, 20, 0) 62%);
-      pointer-events: none;
-    }
-
-    main {
-      position: relative;
-      z-index: 1;
-      width: 100%;
-      max-width: 660px;
-      text-align: center;
-    }
-
-    .logo {
-      width: 230px;
-      max-width: 62vw;
-      height: auto;
-      margin: 0 auto 44px;
-      display: block;
-    }
-
-    .kicker {
-      display: inline-flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 22px;
-      color: var(--orange);
-      font-family: 'Manrope', Arial, sans-serif;
-      font-size: 12px;
-      font-weight: 800;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-    }
-
-    .kicker::before {
-      width: 26px;
-      height: 2px;
-      background: var(--orange);
-      content: '';
-    }
-
-    h1 {
-      color: var(--white);
-      font-family: 'Manrope', Arial, sans-serif;
-      font-size: clamp(2.1rem, 6vw, 3.4rem);
-      font-weight: 800;
-      line-height: 1.08;
-      letter-spacing: -0.04em;
-    }
-
-    h1 strong { color: var(--orange); font-weight: inherit; }
-
-    h1 + p {
-      max-width: 470px;
-      margin: 22px auto 0;
-      font-size: 17px;
-    }
-
-    /* Indeterminate: there is no percentage to honour, so it loops as a sign of activity
-       rather than pretending to measure progress. */
-    .bar {
-      position: relative;
-      width: min(320px, 78%);
-      height: 4px;
-      margin: 40px auto 46px;
-      overflow: hidden;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.1);
-    }
-
-    .bar::after {
-      position: absolute;
-      inset: 0 auto 0 0;
-      width: 38%;
-      border-radius: 999px;
-      background: linear-gradient(90deg, rgba(255, 112, 20, 0), var(--orange), rgba(255, 112, 20, 0));
-      animation: sweep 2.1s cubic-bezier(0.65, 0, 0.35, 1) infinite;
-      content: '';
-    }
-
-    @keyframes sweep {
-      0% { transform: translateX(-105%); }
-      100% { transform: translateX(370%); }
-    }
-
-    .contact-label {
-      margin-bottom: 18px;
-      color: #8b90ad;
-      font-size: 13px;
-      letter-spacing: 0.04em;
-    }
-
-    .contacts {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-    }
-
-    .contacts a {
-      display: inline-flex;
-      align-items: center;
-      gap: 9px;
-      padding: 13px 20px;
-      border: 1px solid rgba(255, 255, 255, 0.16);
-      border-radius: 14px;
-      color: var(--white);
-      background: rgba(255, 255, 255, 0.05);
-      font-size: 14px;
-      font-weight: 600;
-      text-decoration: none;
-      transition: border-color 0.22s ease, background 0.22s ease, transform 0.22s ease;
-    }
-
-    .contacts a:hover,
-    .contacts a:focus-visible {
-      border-color: rgba(255, 112, 20, 0.55);
-      background: rgba(255, 112, 20, 0.12);
-      transform: translateY(-2px);
-    }
-
-    .contacts a:focus-visible { outline: 2px solid var(--orange); outline-offset: 3px; }
-
-    .contacts svg {
-      width: 17px;
-      height: 17px;
-      flex: 0 0 auto;
-      fill: none;
-      stroke: var(--orange);
-      stroke-width: 1.8;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-    }
-
-    footer {
-      margin-top: 54px;
-      color: #6e7391;
-      font-size: 12.5px;
-    }
-
-    @media (max-width: 520px) {
-      .contacts a { width: 100%; justify-content: center; }
-      .orbit-one { top: -140px; right: -200px; width: 420px; height: 420px; }
-      .orbit-two { bottom: -240px; left: -210px; width: 460px; height: 460px; }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      .bar::after { animation: none; width: 100%; }
-      .contacts a { transition: none; }
-    }
-  </style>
+  ]
+}</script>
 </head>
-<body>
+<body data-page="home">
 
-<span class="glow" aria-hidden="true"></span>
-<span class="orbit orbit-one" aria-hidden="true"></span>
-<span class="orbit orbit-two" aria-hidden="true"></span>
-
-<main>
-  <img class="logo" src="assets/img/logo-axxis-light.png" alt="Axxis Contabilidade Digital" width="900" height="318">
-
-  <span class="kicker">Em construção</span>
-
-  <h1>Estamos preparando <strong>uma nova experiência.</strong></h1>
-  <p>Nosso site está em atualização. Enquanto isso, a equipe segue à disposição pelos canais de sempre.</p>
-
-  <div class="bar" role="presentation"></div>
-
-  <p class="contact-label">Fale com a Axxis</p>
-
-  <nav class="contacts" aria-label="Canais de contato">
-    <a href="mailto:comercial@grupoaxxis.com.br">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="4.5" width="19" height="15" rx="2.5"/><path d="m3 6 9 6 9-6"/></svg>
-      comercial@grupoaxxis.com.br
+<a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+<header class="site-header">
+  <div class="container header-main">
+    <a class="brand" href="index.html" aria-label="Axxis Contabilidade Digital - início">
+      <img src="assets/img/logo-axxis.png" alt="Axxis Contabilidade Digital">
     </a>
-    <a href="tel:+5561981882247">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 3h3l1.5 4.5-2 1.5a12.5 12.5 0 0 0 6 6l1.5-2 4.5 1.5v3a2 2 0 0 1-2.2 2A17.5 17.5 0 0 1 4.5 5.2 2 2 0 0 1 6.5 3Z"/></svg>
-      (61) 98188-2247
-    </a>
-    <a href="https://www.instagram.com/axxiscontabilidade" target="_blank" rel="noopener">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1"/></svg>
-      Instagram
-    </a>
-    <a href="https://www.linkedin.com/company/axxis-contabilidade" target="_blank" rel="noopener">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M7.5 10.5V17M7.5 7.2v.1M11.5 17v-3.6a2.1 2.1 0 0 1 4.2 0V17"/></svg>
-      LinkedIn
-    </a>
-  </nav>
+    <button class="mobile-toggle" type="button" data-mobile-toggle aria-label="Abrir menu" aria-expanded="false" aria-controls="menu-principal">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="main-nav" id="menu-principal" data-main-nav aria-label="Navegação principal">
+      <div class="nav-item" data-dropdown>
+        <button class="nav-trigger" data-dropdown-trigger data-nav="servicos" type="button" aria-expanded="false" aria-haspopup="true">
+          Serviços
+          <svg class="nav-chevron" viewBox="0 0 20 20" aria-hidden="true"><path d="m5 7.5 5 5 5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+        <div class="mega-menu" role="region" aria-label="Nossos serviços">
+          <div class="mega-grid">
+            <div class="mega-copy">
+              <span class="mega-eyebrow">Nossos serviços</span>
+              <h3>Do CNPJ à rotina mensal</h3>
+              <div class="mega-links">
+                <a href="servicos.html#abrir">Abrir empresa <span>→</span></a>
+                <a href="servicos.html#trocar">Trocar de contador <span>→</span></a>
+                <a href="servicos.html#migrar">Migrar de MEI para ME <span>→</span></a>
+                <a href="servicos.html#mensal">Contabilidade mensal <span>→</span></a>
+              </div>
+            </div>
+            <a class="mega-feature" href="servicos.html">
+              <img src="assets/img/servicos-menu.svg" alt="Ilustração de um profissional acompanhando indicadores da empresa">
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="nav-item" data-dropdown>
+        <button class="nav-trigger" data-dropdown-trigger data-nav="segmentos" type="button" aria-expanded="false" aria-haspopup="true">
+          Segmentos
+          <svg class="nav-chevron" viewBox="0 0 20 20" aria-hidden="true"><path d="m5 7.5 5 5 5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+        <div class="mega-menu" role="region" aria-label="Segmentos atendidos">
+          <div class="mega-grid">
+            <div class="mega-copy">
+              <span class="mega-eyebrow">Segmentos atendidos</span>
+              <h3>Foco em quem presta serviços</h3>
+              <div class="mega-links">
+                <a href="segmentos.html#consultoria">Consultoria e treinamento <span>→</span></a>
+                <a href="segmentos.html#tecnologia">Tecnologia e SaaS <span>→</span></a>
+                <a href="segmentos.html#marketing">Marketing e criativos <span>→</span></a>
+                <a href="segmentos.html#saude">Saúde e bem-estar <span>→</span></a>
+                <a href="segmentos.html#engenharia">Arquitetura e engenharia <span>→</span></a>
+                <a href="segmentos.html#liberais">Profissionais liberais <span>→</span></a>
+              </div>
+            </div>
+            <a class="mega-feature" href="segmentos.html">
+              <img src="assets/img/segmentos-menu.svg" alt="Ilustração de diferentes segmentos de prestadores de serviços">
+            </a>
+          </div>
+        </div>
+      </div>
+      <a class="nav-link" data-nav="como" href="como-funciona.html">Como funciona</a>
+      <a class="nav-link" data-nav="planos" href="planos.html">Planos</a>
+      <a class="nav-link" data-nav="sobre" href="sobre.html">Sobre</a>
+      <a class="btn btn-primary btn-full nav-mobile-cta" href="contato.html">Falar com especialista</a>
+    </nav>
+    <a class="btn btn-outline btn-small header-cta" href="contato.html">Falar com especialista</a>
+  </div>
+</header>
 
-  <footer>Axxis Contabilidade Digital &middot; CNPJ 33.354.692/0001-25 &middot; Águas Claras, Brasília &ndash; DF</footer>
+<main id="conteudo">
+
+<section class="hero">
+  <div class="hero-grid-bg"></div>
+  <div class="container hero-grid">
+    <div class="hero-copy reveal">
+      <div class="eyebrow"><span></span> Contabilidade digital para empresas que querem crescer</div>
+      <h1>Menos burocracia.<br><strong>Mais visão para decidir.</strong></h1>
+      <p>A Axxis une tecnologia, organização e atendimento próximo para deixar sua contabilidade simples, segura e pronta para acompanhar o ritmo do seu negócio.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="contato.html">Quero conhecer a Axxis <span>→</span></a>
+        <a class="text-link" href="como-funciona.html"><span class="play">▶</span> Veja como funciona</a>
+      </div>
+      <div class="hero-proof">
+        <div class="avatars"><span>LC</span><span>SF</span><span>JC</span></div>
+        <p><b>Atendimento humano</b><br>com experiência digital de ponta a ponta.</p>
+      </div>
+    </div>
+
+    <div class="hero-visual reveal delay-1" aria-label="Prévia ilustrativa da plataforma Axxis">
+      <div class="orange-orbit orbit-one"></div>
+      <div class="orange-orbit orbit-two"></div>
+      <div class="dashboard-window">
+        <div class="window-top">
+          <div class="window-dots"><i></i><i></i><i></i></div>
+          <span>Visão geral</span>
+          <div class="user-chip">AC</div>
+        </div>
+        <div class="dashboard-body">
+          <aside class="dash-menu">
+            <div class="mini-logo"><img src="assets/img/logoxx-b&amp;p.png" alt=""></div>
+            <span></span><span></span><span></span><span></span>
+          </aside>
+          <div class="dash-content">
+            <div class="dash-heading"><div><small>Bom dia, Ana</small><h3>Sua empresa em um só lugar</h3></div><button type="button">Julho ▾</button></div>
+            <div class="metric-grid">
+              <div class="metric"><div class="metric-icon orange">↗</div><small>Faturamento</small><strong>R$ 84.750</strong><em>+12,4% no período</em></div>
+              <div class="metric"><div class="metric-icon blue">✓</div><small>Obrigações</small><strong>Em dia</strong><em>Próxima em 8 dias</em></div>
+              <div class="metric"><div class="metric-icon gray">▣</div><small>Documentos</small><strong>32 arquivos</strong><em>Organizados na nuvem</em></div>
+            </div>
+            <div class="chart-card">
+              <div class="chart-head"><div><small>Resultado mensal</small><strong>Receitas x despesas</strong></div><span>Últimos 6 meses</span></div>
+              <div class="chart-area">
+                <div class="line-chart">
+                  <svg viewBox="0 0 600 190" preserveAspectRatio="none" aria-hidden="true">
+                    <defs><linearGradient id="classicHeroFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff7200" stop-opacity=".25"/><stop offset="1" stop-color="#ff7200" stop-opacity="0"/></linearGradient></defs>
+                    <path class="area" d="M0,160 C55,140 75,115 125,124 C180,134 210,78 265,91 C320,104 350,55 405,69 C465,85 500,38 600,42 L600,190 L0,190 Z"/>
+                    <path class="line" pathLength="1" d="M0,160 C55,140 75,115 125,124 C180,134 210,78 265,91 C320,104 350,55 405,69 C465,85 500,38 600,42"/>
+                  </svg>
+                </div>
+                <div class="bars"><i style="height:40%"></i><i style="height:58%"></i><i style="height:48%"></i><i style="height:72%"></i><i style="height:68%"></i><i style="height:88%"></i></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="floating-card tax-card"><span>✓</span><div><b>Impostos calculados</b><small>Prontos para pagamento</small></div></div>
+      <div class="floating-card support-card"><div class="support-avatar">AX</div><div><b>Especialista Axxis</b><small>Online agora</small></div><span class="online"></span></div>
+    </div>
+  </div>
+  <div class="container trust-strip reveal">
+    <span>Uma rotina contábil mais simples para</span>
+    <div class="trust-items"><b>Prestadores de serviços</b><i></i><b>Comércios</b><i></i><b>Empresas digitais</b><i></i><b>Profissionais liberais</b></div>
+  </div>
+</section>
+
+<section class="section services-preview">
+  <div class="container services-preview-layout">
+    <div class="services-preview-copy">
+      <div class="section-heading reveal"><span class="kicker">Nossos serviços</span><h2>Uma estrutura para cada <strong>momento da empresa.</strong></h2><p>Comece, migre ou reorganize sua contabilidade com acompanhamento em cada etapa.</p></div>
+      <div class="service-stack">
+        <a class="service-card featured reveal" href="servicos.html#abrir"><span class="service-index">01</span><h3>Abrir empresa</h3><p>Planejamento inicial, documentos e direcionamento para começar com uma estrutura mais organizada.</p><div class="service-link">Ver como funciona <span>→</span></div></a>
+        <a class="service-card reveal delay-1" href="servicos.html#trocar"><span class="service-index">02</span><h3>Trocar de contador</h3><p>Transição acompanhada para trazer documentos, rotinas e histórico com menos atrito.</p><div class="service-link">Ver como funciona <span>→</span></div></a>
+        <a class="service-card reveal delay-2" href="servicos.html#migrar"><span class="service-index">03</span><h3>Migrar de MEI para ME</h3><p>Análise do novo momento e apoio na mudança de estrutura da empresa.</p><div class="service-link">Ver como funciona <span>→</span></div></a>
+        <a class="service-card reveal delay-3" href="servicos.html#mensal"><span class="service-index">04</span><h3>Contabilidade mensal</h3><p>Fiscal, contábil, documentos e orientação em uma rotina digital e próxima.</p><div class="service-link">Ver como funciona <span>→</span></div></a>
+      </div>
+    </div>
+    <div class="services-preview-photo reveal delay-1">
+      <img loading="lazy" class="services-preview-blob" src="assets/img/detalhe-4-crop.webp" alt="" aria-hidden="true">
+      <img loading="lazy" class="services-preview-person" src="assets/img/japa-crop.webp" alt="Profissional sorrindo enquanto trabalha no notebook, representando o atendimento da Axxis">
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-heading centered reveal"><span class="kicker">Tudo conectado</span><h2>Contabilidade que funciona <strong>para o negócio.</strong></h2><p>Menos informação solta, mais clareza sobre o que precisa ser feito e por quê.</p></div>
+    <div class="platform-showcase reveal">
+      <div class="platform-tabs" role="tablist" aria-label="Áreas da plataforma Axxis">
+        <span class="platform-tabs-indicator" aria-hidden="true"></span>
+        <button class="platform-tab active" type="button" data-platform-tab="0">Visão Geral</button>
+        <button class="platform-tab" type="button" data-platform-tab="1">Faturamento</button>
+        <button class="platform-tab" type="button" data-platform-tab="2">Painel Fiscal</button>
+      </div>
+
+      <div class="platform-device">
+        <img loading="lazy" class="platform-device-slide active" data-platform-slide="0" src="assets/img/plataforma-visao-geral.webp" alt="Tela Visão Geral da plataforma Axxis, com faturamento, despesas, lucro líquido, fluxo de caixa, próximos vencimentos e documentos recentes">
+        <img loading="lazy" class="platform-device-slide" data-platform-slide="1" src="assets/img/plataforma-faturamento.webp" alt="Tela de Faturamento da plataforma Axxis, com receita bruta e líquida, ticket médio, inadimplência, evolução mensal, metas e principais clientes">
+        <img loading="lazy" class="platform-device-slide" data-platform-slide="2" src="assets/img/plataforma-fiscal.webp" alt="Tela Painel Fiscal da plataforma Axxis, com tributos do mês, guias emitidas, distribuição por tipo de imposto e status das obrigações">
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section process-section">
+  <div class="container process-grid">
+    <div class="process-copy reveal"><span class="kicker kicker-light">Como funciona</span><h2>Trocar para a Axxis é <strong>mais simples do que parece.</strong></h2><p>A equipe conduz a entrada, organiza o cenário e mantém você informado em cada etapa.</p><a class="btn btn-white" href="como-funciona.html">Conhecer o processo <span>→</span></a></div>
+    <div class="process-list">
+      <div class="process-step reveal"><span>01</span><div><h3>Diagnóstico da empresa</h3><p>Entendemos atividade, regime, volume, equipe e momento atual.</p></div></div>
+      <div class="process-step reveal delay-1"><span>02</span><div><h3>Proposta alinhada</h3><p>Você recebe um escopo coerente com a complexidade da operação.</p></div></div>
+      <div class="process-step reveal delay-2"><span>03</span><div><h3>Onboarding acompanhado</h3><p>Organizamos acessos, documentos e comunicação para iniciar a rotina.</p></div></div>
+      <div class="process-step reveal delay-3"><span>04</span><div><h3>Contabilidade em movimento</h3><p>Calendário, orientações e informações passam a fazer parte do dia a dia.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section plans-preview">
+  <div class="container">
+    <div class="section-heading centered reveal"><span class="kicker">Planos sob medida</span><h2>O suporte certo para <strong>cada fase.</strong></h2><p>Os formatos abaixo representam níveis de acompanhamento. A proposta final considera a realidade da empresa.</p></div>
+    <div class="plans-grid">
+      <article class="plan-card reveal"><span class="plan-name">Essencial</span><h3>Rotina organizada</h3><p>Para empresas com operação mais enxuta que precisam manter contabilidade, fiscal e obrigações em ordem.</p><ul><li>Contabilidade mensal</li><li>Apuração de impostos</li><li>Entrega de obrigações</li><li>Atendimento digital</li></ul><a class="btn btn-outline btn-full" href="planos.html">Conhecer plano</a></article>
+      <article class="plan-card popular reveal delay-1"><span class="popular-badge">Mais escolhido</span><span class="plan-name">Crescimento</span><h3>Mais acompanhamento</h3><p>Para prestadores de serviços em expansão que precisam de visão e orientação mais próxima.</p><ul><li>Tudo do Essencial</li><li>Acompanhamento recorrente</li><li>Relatórios gerenciais</li><li>Orientação para decisões</li></ul><a class="btn btn-primary btn-full" href="planos.html">Conhecer plano</a></article>
+      <article class="plan-card reveal delay-2"><span class="plan-name">Personalizado</span><h3>Escopo específico</h3><p>Para operações com demandas, volume ou processos que pedem um desenho próprio.</p><ul><li>Escopo personalizado</li><li>Rotinas específicas</li><li>Atendimento dedicado</li><li>Projetos e integrações</li></ul><a class="btn btn-outline btn-full" href="planos.html">Montar meu plano</a></article>
+    </div>
+  </div>
+</section>
+
+<section class="statement-section"><div class="container statement-card statement-card--photo reveal"><span class="statement-card-bg" aria-hidden="true"></span><div class="statement-photo"><span class="statement-photo-blob" aria-hidden="true"></span><img loading="lazy" src="assets/img/mulher.webp" alt="Profissional sorrindo enquanto trabalha com o notebook, representando o atendimento humano da Axxis"></div><div class="statement-content"><div class="statement-mark">“</div><blockquote>Contabilidade não precisa ser apenas uma obrigação. Quando a informação fica clara, ela vira ferramenta para crescer com segurança.</blockquote><div class="statement-signature"><strong>Digital na rotina.</strong><span>Humana no atendimento.</span></div></div></div></section>
+
+<section class="section" id="faq">
+  <div class="container faq-layout">
+    <div class="faq-intro reveal"><span class="kicker">Perguntas frequentes</span><h2>Antes de começar, <strong>tire suas dúvidas.</strong></h2><p>Conheça os pontos principais e fale com a equipe para analisar o seu cenário.</p><a class="text-link orange" href="contato.html">Conversar com especialista</a></div>
+    <div class="reveal delay-1"><div class="accordion" data-single="true">
+<div class="faq-item open">
+          <button class="faq-question" type="button" aria-expanded="true"><span>A Axxis atende somente prestadores de serviços?</span><i>+</i></button>
+          <div class="faq-answer"><div><p>O foco principal do site está em empresas e profissionais que vendem serviços. A equipe pode avaliar operações próximas a esse perfil e confirmar o melhor formato de atendimento.</p></div></div>
+        </div>
+<div class="faq-item">
+          <button class="faq-question" type="button" aria-expanded="false"><span>Como funciona a troca de contador?</span><i>+</i></button>
+          <div class="faq-answer"><div><p>A Axxis orienta os documentos, organiza a entrada da empresa e acompanha a transição para reduzir ruído na rotina. O escopo final depende do cenário atual da empresa.</p></div></div>
+        </div>
+<div class="faq-item">
+          <button class="faq-question" type="button" aria-expanded="false"><span>O atendimento é realmente humano?</span><i>+</i></button>
+          <div class="faq-answer"><div><p>Sim. A tecnologia centraliza dados, documentos e tarefas, enquanto o contato e as orientações são conduzidos por profissionais da equipe.</p></div></div>
+        </div>
+<div class="faq-item">
+          <button class="faq-question" type="button" aria-expanded="false"><span>Vocês ajudam a avaliar o enquadramento tributário?</span><i>+</i></button>
+          <div class="faq-answer"><div><p>A proposta é analisar a realidade da operação e orientar o enquadramento dentro das possibilidades aplicáveis, considerando atividade, faturamento, estrutura e demais informações da empresa.</p></div></div>
+        </div>
+<div class="faq-item">
+          <button class="faq-question" type="button" aria-expanded="false"><span>Os planos têm preço fixo?</span><i>+</i></button>
+          <div class="faq-answer"><div><p>Nesta versão, os planos representam níveis de acompanhamento. A proposta final pode variar conforme regime, volume de notas, folha, quantidade de sócios e complexidade da operação.</p></div></div>
+        </div>
+</div></div>
+  </div>
+</section>
+
+<section class="cta-section">
+      <div class="container cta-card cta-card--photo cta-card--photo-left reveal">
+        <img loading="lazy" class="cta-card-wave cta-card-wave--left" src="assets/img/12.webp" alt="" aria-hidden="true">
+        <img loading="lazy" class="cta-card-photo" style="transform: scaleX(1)" src="assets/img/peoples (3).webp" alt="Profissional sorrindo, representando o atendimento da Axxis">
+        <img loading="lazy" class="cta-card-wave cta-card-wave--right" src="assets/img/13.webp" alt="" aria-hidden="true">
+        <div class="cta-card-copy-wrap">
+        <div class="cta-copy">
+          <span class="kicker kicker-light">Pronto para avançar?</span>
+          <h2>Vamos tirar a contabilidade do caminho do seu crescimento?</h2>
+          <p>Conte sobre sua empresa. A equipe Axxis organiza o cenário e apresenta o formato mais adequado para sua rotina.</p>
+        </div>
+        <form class="lead-form" data-lead-form>
+      <div class="form-grid">
+        <div class="form-field"><label for="nome">Seu nome</label><input id="nome" name="nome" type="text" placeholder="Como podemos chamar você?" required></div>
+        <div class="form-field"><label for="empresa">Empresa</label><input id="empresa" name="empresa" type="text" placeholder="Nome da empresa"></div>
+        <div class="form-field"><label for="whatsapp">WhatsApp</label><input id="whatsapp" name="whatsapp" type="tel" placeholder="(00) 00000-0000" required></div>
+        <div class="form-field"><label for="email">E-mail</label><input id="email" name="email" type="email" placeholder="voce@empresa.com" required></div>
+        <div class="form-field full"><label for="interesse">Como a Axxis pode ajudar?</label><select id="interesse" name="interesse" required><option value="">Selecione uma opção</option><option>Abrir empresa</option><option>Trocar de contador</option><option>Migrar de MEI para ME</option><option>Contabilidade mensal</option><option>Outro assunto</option></select></div>
+
+      </div>
+      <button class="btn btn-primary btn-full" type="submit">Quero falar com a Axxis <span>→</span></button>
+      <div class="form-success" role="status">Recebemos seus dados nesta demonstração. A integração pode ser configurada no projeto.</div>
+    </form>
+        </div>
+      </div>
+    </section>
+
 </main>
+
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div class="footer-brand">
+      <img loading="lazy" src="assets/img/logo-axxis.png" alt="Axxis Contabilidade Digital">
+      <p>Contabilidade digital para prestadores de serviços, com tecnologia na rotina e especialistas na conversa.</p>
+    </div>
+    <div class="footer-col">
+      <h3>Serviços</h3>
+      <a href="servicos.html#abrir">Abrir empresa</a>
+      <a href="servicos.html#trocar">Trocar de contador</a>
+      <a href="servicos.html#migrar">Migrar de MEI para ME</a>
+      <a href="servicos.html#mensal">Contabilidade mensal</a>
+    </div>
+    <div class="footer-col">
+      <h3>Axxis</h3>
+      <a href="como-funciona.html">Como funciona</a>
+      <a href="planos.html">Planos</a>
+      <a href="sobre.html">Sobre a Axxis</a>
+      <a href="contato.html">Contato</a>
+    </div>
+    <div class="footer-col">
+      <h3>Contato</h3>
+      <a href="tel:+5561981882247">(61) 98188-2247</a>
+      <a href="mailto:comercial@grupoaxxis.com.br">comercial@grupoaxxis.com.br</a>
+      <span>Ed. Connect Towers, QS 1, Rua 212, Bloco D, 8º andar, sala 804, Águas Claras, Brasília - DF, 71950-550</span>
+      <div class="footer-social" aria-label="Redes sociais"><a href="https://www.instagram.com/axxiscontabilidade" target="_blank" rel="noopener noreferrer" aria-label="Instagram: @axxiscontabilidade">IG</a><a href="https://www.linkedin.com/company/axxis-contabilidade" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn: Axxis Contabilidade">IN</a></div>
+    </div>
+  </div>
+  <div class="container footer-bottom">
+    <span>© <span data-year></span> Axxis Contabilidade Digital — CNPJ 33.354.692/0001-25. Todos os direitos reservados.</span>
+    <div><a href="privacidade.html">Privacidade</a><a href="termos.html">Termos de uso</a></div>
+  </div>
+</footer>
+
+
+<div class="entry-modal" data-entry-modal aria-hidden="true" hidden>
+  <div class="entry-modal-backdrop" data-entry-modal-close></div>
+  <section class="entry-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="entry-modal-title" aria-describedby="entry-modal-description" tabindex="-1">
+    <button class="entry-modal-close" type="button" data-entry-modal-close aria-label="Fechar apresentação">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+    </button>
+
+    <div class="entry-modal-grid">
+      <div class="entry-modal-copy">
+        <img class="entry-modal-logo" src="assets/img/logo-axxis.png" alt="Axxis Contabilidade Digital">
+        <span class="entry-modal-kicker"><i></i> Bem-vindo à Axxis</span>
+        <h2 id="entry-modal-title">Prazer, somos a <strong>Axxis!</strong></h2>
+        <p id="entry-modal-description">Antes de continuar, conte como prefere ser chamado. Assim, sua experiência começa de um jeito mais próximo e a conversa já chega no assunto certo.</p>
+
+        <form class="entry-modal-form" data-lead-form data-entry-modal-form>
+          <div class="entry-modal-fields">
+            <div class="form-field">
+              <label for="popup-nome">Nome</label>
+              <input id="popup-nome" name="nome" type="text" autocomplete="name" placeholder="Como podemos chamar você?" required>
+            </div>
+            <div class="form-field">
+              <label for="popup-whatsapp">Seu melhor contato <span>(e-mail ou telefone)</span></label>
+              <input id="popup-whatsapp" name="contato" type="text" autocomplete="email" placeholder="voce@empresa.com ou (00) 00000-0000" required>
+            </div>
+            <div class="form-field">
+              <label for="popup-interesse">O que você precisa?</label>
+              <select id="popup-interesse" name="interesse" required>
+                <option value="">Selecione uma opção</option>
+                <option>Abrir empresa</option>
+                <option>Trocar de contador</option>
+                <option>Migrar de MEI para ME</option>
+                <option>Contabilidade mensal</option>
+                <option>Quero entender o melhor caminho</option>
+              </select>
+            </div>
+          </div>
+
+          <label class="entry-modal-consent">
+            <input type="checkbox" required>
+            <span>Concordo em receber contato da Axxis e li a <a href="privacidade.html">política de privacidade</a>.</span>
+          </label>
+
+          <button class="btn btn-primary btn-full entry-modal-submit" type="submit">Quero conhecer a Axxis <span>→</span></button>
+          <div class="form-success" role="status">Dados recebidos nesta demonstração. A integração pode ser conectada ao canal oficial da Axxis.</div>
+          <small class="entry-modal-note"><i>✓</i> Sem compromisso · atendimento humano</small>
+        </form>
+      </div>
+
+      <aside class="entry-modal-visual" aria-hidden="true">
+        <div class="entry-modal-visual-top">
+          <span>Contabilidade digital</span>
+          <strong>Feita para prestadores de serviços</strong>
+        </div>
+        <img loading="lazy" src="assets/img/mulher.webp" alt="Pessoa sorrindo usando notebook, representando o atendimento da Axxis">
+        <div class="entry-modal-floating-card">
+          <span class="entry-modal-check">✓</span>
+          <div><strong>Atendimento próximo</strong><small>tecnologia na rotina, especialistas na conversa</small></div>
+        </div>
+        <div class="entry-modal-segments"><span>Consultoria</span><span>Tecnologia</span><span>Saúde</span><span>Criativos</span></div>
+      </aside>
+    </div>
+  </section>
+</div>
+
+<a class="floating-contact" href="contato.html" aria-label="Falar com a Axxis"><i>✦</i><span>Fale com a Axxis</span></a>
+<script src="assets/js/main.js?v=49"></script>
 
 </body>
 </html>

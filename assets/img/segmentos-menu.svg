@@ -1,0 +1,58 @@
+<svg width="840" height="520" viewBox="0 0 840 520" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg2" x1="42" y1="24" x2="791" y2="500" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F8F9FC"/>
+      <stop offset="1" stop-color="#EEF1F7"/>
+    </linearGradient>
+    <filter id="cardShadow" x="-50" y="-50" width="940" height="620" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="18" stdDeviation="22" flood-color="#05063E" flood-opacity="0.12"/>
+    </filter>
+  </defs>
+  <rect width="840" height="520" rx="38" fill="url(#bg2)"/>
+  <circle cx="727" cy="87" r="155" fill="#FF7014" fill-opacity="0.10"/>
+  <circle cx="118" cy="457" r="155" fill="#05063E" fill-opacity="0.07"/>
+  <path d="M170 262H670" stroke="#D9DDE8" stroke-width="6" stroke-linecap="round"/>
+  <path d="M420 116V408" stroke="#D9DDE8" stroke-width="6" stroke-linecap="round"/>
+  <circle cx="420" cy="262" r="58" fill="#05063E"/>
+  <path d="M391 265L411 285L451 238" stroke="#FF7014" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <g filter="url(#cardShadow)">
+    <rect x="74" y="78" width="220" height="144" rx="26" fill="white"/>
+    <rect x="106" y="108" width="52" height="52" rx="16" fill="#FFF1E6"/>
+    <path d="M119 147V127H145V147" stroke="#FF7014" stroke-width="5" stroke-linecap="round"/>
+    <path d="M126 127V118H138V127" stroke="#FF7014" stroke-width="5" stroke-linecap="round"/>
+    <rect x="178" y="113" width="79" height="12" rx="6" fill="#171A43"/>
+    <rect x="178" y="138" width="88" height="9" rx="4.5" fill="#B8BDCA"/>
+    <rect x="106" y="181" width="151" height="9" rx="4.5" fill="#E0E3EB"/>
+  </g>
+
+  <g filter="url(#cardShadow)">
+    <rect x="546" y="78" width="220" height="144" rx="26" fill="white"/>
+    <rect x="578" y="108" width="52" height="52" rx="16" fill="#EEF4FF"/>
+    <path d="M591 145C599 134 608 127 619 122" stroke="#2C62B0" stroke-width="5" stroke-linecap="round"/>
+    <circle cx="592" cy="145" r="5" fill="#2C62B0"/>
+    <circle cx="619" cy="122" r="5" fill="#2C62B0"/>
+    <rect x="650" y="113" width="79" height="12" rx="6" fill="#171A43"/>
+    <rect x="650" y="138" width="88" height="9" rx="4.5" fill="#B8BDCA"/>
+    <rect x="578" y="181" width="151" height="9" rx="4.5" fill="#E0E3EB"/>
+  </g>
+
+  <g filter="url(#cardShadow)">
+    <rect x="74" y="302" width="220" height="144" rx="26" fill="white"/>
+    <rect x="106" y="332" width="52" height="52" rx="16" fill="#EEF8F2"/>
+    <path d="M132 344V372M118 358H146" stroke="#2B9C62" stroke-width="6" stroke-linecap="round"/>
+    <rect x="178" y="337" width="79" height="12" rx="6" fill="#171A43"/>
+    <rect x="178" y="362" width="88" height="9" rx="4.5" fill="#B8BDCA"/>
+    <rect x="106" y="405" width="151" height="9" rx="4.5" fill="#E0E3EB"/>
+  </g>
+
+  <g filter="url(#cardShadow)">
+    <rect x="546" y="302" width="220" height="144" rx="26" fill="white"/>
+    <rect x="578" y="332" width="52" height="52" rx="16" fill="#F4F0FF"/>
+    <path d="M589 372L604 343L619 372" stroke="#7652C7" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M595 361H613" stroke="#7652C7" stroke-width="5" stroke-linecap="round"/>
+    <rect x="650" y="337" width="79" height="12" rx="6" fill="#171A43"/>
+    <rect x="650" y="362" width="88" height="9" rx="4.5" fill="#B8BDCA"/>
+    <rect x="578" y="405" width="151" height="9" rx="4.5" fill="#E0E3EB"/>
+  </g>
+</svg>

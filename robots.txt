@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://axxiscontabilidadedigital.com.br/sitemap.xml
