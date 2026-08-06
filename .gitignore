@@ -2,3 +2,8 @@ node_modules/
 .DS_Store
 Thumbs.db
 *.log
+
+# Fotos originais que entram para virar capa. Ficam fora do repositório: são dezenas de MB e
+# os nomes dos arquivos de banco de imagem estouram o limite de caminho do Windows, o que faz
+# `git add` falhar. O que vai para o site é a versão já convertida em assets/img/.
+assets/img-blog/

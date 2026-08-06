@@ -21,7 +21,7 @@
   <meta name="twitter:description" content="Conteúdos sobre pró-labore, distribuição de lucros e organização financeira da empresa de serviços, com a contabilidade como base.">
   <meta name="twitter:image" content="https://axxiscontabilidadedigital.com.br/assets/img/og-cover.jpg">
   <link rel="icon" href="assets/img/logo-xx.png" type="image/png">
-  <link rel="stylesheet" href="assets/css/styles.css?v=50">
+  <link rel="stylesheet" href="assets/css/styles.css?v=71">
 <script type="application/ld+json">{
   "@context": "https://schema.org",
   "@type": "AccountingService",
@@ -175,30 +175,40 @@
 <section class="section">
   <div class="container">
 
-    <nav class="blog-filter reveal" aria-label="Categorias de conteúdo">
+    <div class="blog-toolbar reveal">
+      <div class="blog-search">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/></svg>
+        <input type="search" data-blog-search placeholder="Buscar por assunto, título ou categoria" autocomplete="off" aria-label="Buscar conteúdos">
+        <button class="blog-search-clear" type="button" data-blog-search-clear aria-label="Limpar busca" hidden>&times;</button>
+      </div>
+    <nav class="blog-filter" aria-label="Categorias de conteúdo">
       <a class="blog-chip" href="conteudos.html">Todos</a>
       <a class="blog-chip" href="conteudos-categoria-abertura.html">Abertura e troca de contador</a>
       <a class="blog-chip" href="conteudos-categoria-mei.html">MEI e migração</a>
       <a class="blog-chip" href="conteudos-categoria-impostos.html">Impostos e obrigações</a>
       <a class="blog-chip is-active" href="conteudos-categoria-gestao.html" aria-current="page">Gestão financeira</a>
     </nav>
+    </div>
+
+    <p class="blog-count" data-blog-count aria-live="polite"></p>
+
 
     <div class="section-heading reveal"><span class="kicker">Nesta categoria</span><h2>Retiradas, lucro e <strong>organização do caixa.</strong></h2><p>Como o sócio se paga e o que a contabilidade precisa demonstrar antes de distribuir resultado.</p></div>
 
     <div class="blog-grid">
-      <a class="blog-card reveal" href="conteudo-pro-labore-e-distribuicao-de-lucros.html">
+      <a class="blog-card reveal" data-blog-item href="conteudo-pro-labore-e-distribuicao-de-lucros.html">
         <div class="blog-card-media">
-          <img loading="lazy" src="assets/img/mulher.webp" alt="Sócia organizando as retiradas da empresa no notebook">
+          <img loading="lazy" src="assets/img/capa-pro-labore-e-distribuicao-de-lucros.webp" alt="Sócia organizando as retiradas da empresa no notebook">
         </div>
         <div class="blog-card-body">
-          <span class="tag">Gestão financeira</span>
           <h3>Pró-labore e distribuição de lucros: como o sócio se paga sem desorganizar a empresa</h3>
           <p>A diferença entre as duas formas de o sócio receber, por que a contabilidade em dia é pré-requisito e como definir os valores sem improviso.</p>
-          <div class="article-meta"><span>24 de junho de 2026</span><span>8 min de leitura</span></div>
-          <span class="text-link">Ler artigo</span>
+          <div class="article-meta"><span>24 de junho de 2026</span></div>
         </div>
       </a>
     </div>
+
+    <nav class="blog-pagination" data-blog-pages aria-label="Paginação dos conteúdos" hidden></nav>
 
   </div>
 </section>
@@ -206,71 +216,63 @@
   <div class="container">
     <div class="section-heading reveal"><span class="kicker">Continue lendo</span><h2>Outros conteúdos <strong>para prestadores de serviço.</strong></h2></div>
     <div class="blog-grid">
-      <a class="blog-card reveal" href="conteudo-abrir-empresa-prestador-de-servico.html">
+      <a class="blog-card reveal" data-blog-item href="conteudo-abrir-empresa-prestador-de-servico.html">
         <div class="blog-card-media">
-          <img loading="lazy" src="assets/img/segmento-consultoria.webp" alt="Consultora revisando documentos de abertura de empresa">
+          <img loading="lazy" src="assets/img/capa-abrir-empresa-prestador-de-servico.webp" alt="Consultora revisando documentos de abertura de empresa">
         </div>
         <div class="blog-card-body">
-          <span class="tag">Abertura e troca de contador</span>
           <h3>Abrir empresa como prestador de serviço: o que decidir antes de falar com o contador</h3>
-          <p>Cinco definições que economizam semanas de retrabalho na abertura do CNPJ — e por que a ordem em que você decide muda o custo do processo.</p>
-          <div class="article-meta"><span>22 de julho de 2026</span><span>7 min de leitura</span></div>
-          <span class="text-link">Ler artigo</span>
+          <p>Cinco definições que economizam semanas de retrabalho na abertura do CNPJ, e por que a ordem em que você decide muda o custo do processo.</p>
+          <div class="article-meta"><span>22 de julho de 2026</span></div>
         </div>
       </a>
-      <a class="blog-card reveal" href="conteudo-mei-ou-me-quando-migrar.html">
+      <a class="blog-card reveal" data-blog-item href="conteudo-mei-ou-me-quando-migrar.html">
         <div class="blog-card-media">
-          <img loading="lazy" src="assets/img/segmento-liberais.webp" alt="Profissional liberal avaliando a migração de MEI para ME">
+          <img loading="lazy" src="assets/img/capa-mei-ou-me-quando-migrar.webp" alt="Profissional liberal avaliando a migração de MEI para ME">
         </div>
         <div class="blog-card-body">
-          <span class="tag">MEI e migração</span>
           <h3>MEI ou ME: os sinais de que chegou a hora de migrar</h3>
           <p>Faturamento não é o único indicador. Veja os sinais que costumam aparecer antes do limite e o que muda na rotina depois da virada.</p>
-          <div class="article-meta"><span>8 de julho de 2026</span><span>6 min de leitura</span></div>
-          <span class="text-link">Ler artigo</span>
+          <div class="article-meta"><span>8 de julho de 2026</span></div>
         </div>
       </a>
-      <a class="blog-card reveal" href="conteudo-nota-fiscal-de-servico-erros-comuns.html">
+      <a class="blog-card reveal" data-blog-item href="conteudo-nota-fiscal-de-servico-erros-comuns.html">
         <div class="blog-card-media">
-          <img loading="lazy" src="assets/img/plataforma-faturamento.webp" alt="Tela de emissão de nota fiscal de serviço na plataforma da Axxis">
+          <img loading="lazy" src="assets/img/capa-nota-fiscal-de-servico-erros-comuns.webp" alt="Tela de emissão de nota fiscal de serviço na plataforma da Axxis">
         </div>
         <div class="blog-card-body">
-          <span class="tag">Impostos e obrigações</span>
           <h3>Nota fiscal de serviço: os erros que mais geram retrabalho</h3>
           <p>A maioria dos problemas de nota de serviço nasce no cadastro, não na emissão. Os pontos que mais geram cancelamento, retificação e nota presa.</p>
-          <div class="article-meta"><span>10 de junho de 2026</span><span>5 min de leitura</span></div>
-          <span class="text-link">Ler artigo</span>
+          <div class="article-meta"><span>10 de junho de 2026</span></div>
         </div>
       </a>
     </div>
   </div>
+
+    <div class="blog-empty" data-blog-empty hidden>
+      <h3>Nenhum conteúdo com esse termo</h3>
+      <p>Tente outra palavra, ou <button type="button" data-blog-search-clear>veja todos os artigos</button>.</p>
+    </div>
 </section>
-<section class="cta-section">
-      <div class="container cta-card cta-card--photo cta-card--centered reveal">
-        <img loading="lazy" class="cta-card-wave cta-card-wave--left" src="assets/img/12.webp" alt="" aria-hidden="true">
-        <img loading="lazy" class="cta-card-wave cta-card-wave--right" src="assets/img/13.webp" alt="" aria-hidden="true">
-        <div class="cta-card-copy-wrap">
-        <div class="cta-copy">
-          <span class="kicker kicker-light">Dúvida sobre quanto retirar?</span>
-          <h2>Pró-labore e lucro <strong>com contabilidade por trás.</strong></h2>
-          <p>Conte como a empresa recebe e como você se paga hoje. A equipe indica um desenho de retirada coerente com o contrato social e com o seu caixa.</p>
-        </div>
-        <form class="lead-form" data-lead-form>
-      <div class="form-grid">
-        <div class="form-field"><label for="nome">Seu nome</label><input id="nome" name="nome" type="text" placeholder="Como podemos chamar você?" required></div>
-        <div class="form-field"><label for="empresa">Empresa</label><input id="empresa" name="empresa" type="text" placeholder="Nome da empresa"></div>
-        <div class="form-field"><label for="whatsapp">WhatsApp</label><input id="whatsapp" name="whatsapp" type="tel" placeholder="(00) 00000-0000" required></div>
-        <div class="form-field"><label for="email">E-mail</label><input id="email" name="email" type="email" placeholder="voce@empresa.com" required></div>
-        <div class="form-field full"><label for="interesse">Como a Axxis pode ajudar?</label><select id="interesse" name="interesse" required><option value="">Selecione uma opção</option><option>Abrir empresa</option><option>Trocar de contador</option><option>Migrar de MEI para ME</option><option>Contabilidade mensal</option><option>Outro assunto</option></select></div>
 
+<section class="section newsletter-band">
+  <div class="container newsletter reveal">
+    <div class="newsletter-copy">
+      <span class="kicker kicker-light">Newsletter</span>
+      <h2>Um e-mail por mês, com o que <strong>muda na rotina da sua PJ.</strong></h2>
+      <p>Prazos que chegam, regras que mudam e o que fazer a respeito. Escrito pela equipe que atende prestadores de serviço todos os dias.</p>
+    </div>
+    <form class="newsletter-form" data-lead-form>
+      <input type="hidden" name="assunto" value="Newsletter do blog">
+      <div class="newsletter-fields">
+        <input id="newsletter-email" name="email" type="email" placeholder="voce@empresa.com.br" aria-label="Seu e-mail" required>
+        <button class="btn btn-primary" type="submit">Quero receber</button>
       </div>
-      <button class="btn btn-primary btn-full" type="submit">Quero falar com a Axxis <span>→</span></button>
-      <div class="form-success" role="status">Recebemos seus dados nesta demonstração. A integração pode ser configurada no projeto.</div>
+      <p class="newsletter-note">Um envio por mês. Cancele quando quiser.</p>
+      <div class="form-success" role="status">Pronto. Você receberá o próximo envio.</div>
     </form>
-        </div>
-      </div>
-    </section>
-
+  </div>
+</section>
 </main>
 
 <footer class="site-footer">
@@ -303,7 +305,7 @@
     </div>
   </div>
   <div class="container footer-bottom">
-    <span>© <span data-year></span> Axxis Contabilidade Digital — CNPJ 33.354.692/0001-25. Todos os direitos reservados.</span>
+    <span>© <span data-year></span> Axxis Contabilidade Digital. CNPJ 33.354.692/0001-25. Todos os direitos reservados.</span>
     <div><a href="privacidade.html">Privacidade</a><a href="termos.html">Termos de uso</a></div>
   </div>
 </footer>
@@ -374,7 +376,7 @@
 </div>
 
 <a class="floating-contact" href="contato.html" aria-label="Falar com a Axxis"><i>✦</i><span>Fale com a Axxis</span></a>
-<script src="assets/js/main.js?v=50"></script>
+<script src="assets/js/main.js?v=71"></script>
 
 </body>
 </html>

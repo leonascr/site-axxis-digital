@@ -413,6 +413,120 @@
     });
   });
 
+  // Busca do blog. Filtra os cartões que já estão na página — sem índice, sem dependência e
+  // sem requisição. Funciona porque a lista inteira cabe no HTML; se um dia passar de algumas
+  // dezenas de artigos, isto vira um índice JSON gerado na publicação.
+  const blogSearch = document.querySelector('[data-blog-search]');
+  if (blogSearch) {
+    const items = [...document.querySelectorAll('[data-blog-item]')];
+    const countEl = document.querySelector('[data-blog-count]');
+    const emptyEl = document.querySelector('[data-blog-empty]');
+    const clearButtons = [...document.querySelectorAll('[data-blog-search-clear]')];
+
+    // Sem acento e sem caixa: quem procura "servico" tem que achar "serviço".
+    const normalize = (value) => value
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '');
+
+    const haystack = new Map(items.map((item) => [item, normalize(item.textContent)]));
+
+    // Paginação. POR_PAGINA é o único número a mexer quando o acervo crescer: 3 mantém uma
+    // linha cheia na grade de três colunas e já rende duas páginas com os artigos de hoje.
+    // Ela pagina o resultado da busca, e não a lista inteira, senão filtrar levaria a páginas
+    // vazias.
+    const POR_PAGINA = 3;
+    const pagesEl = document.querySelector('[data-blog-pages]');
+    const gridEl = document.querySelector('.blog-grid');
+    let pagina = 1;
+    let primeiraPassada = true;
+
+    const paginar = (correspondem) => {
+      const paginas = Math.ceil(correspondem.length / POR_PAGINA) || 1;
+      if (pagina > paginas) pagina = paginas;
+      const inicio = (pagina - 1) * POR_PAGINA;
+
+      correspondem.forEach((item, indice) => {
+        const naPagina = indice >= inicio && indice < inicio + POR_PAGINA;
+        item.hidden = !naPagina;
+        // O observer do reveal só dispara para elemento com caixa. Um cartão que nasceu
+        // escondido e apareceu por clique ficaria em opacity 0 até uma rolagem qualquer.
+        if (naPagina && !primeiraPassada) item.classList.add('visible');
+      });
+
+      if (!pagesEl) return;
+      pagesEl.hidden = paginas < 2;
+      pagesEl.innerHTML = paginas < 2 ? '' : Array.from({ length: paginas }, (unused, i) => {
+        const numero = i + 1;
+        const ativa = numero === pagina;
+        return `<button class="blog-page${ativa ? ' is-active' : ''}" type="button"`
+          + ` data-pagina="${numero}" aria-label="Página ${numero}"`
+          + `${ativa ? ' aria-current="page"' : ''}>${numero}</button>`;
+      }).join('');
+    };
+
+    const apply = () => {
+      const query = normalize(blogSearch.value.trim());
+      const correspondem = items.filter((item) => !query || haystack.get(item).includes(query));
+      const shown = correspondem.length;
+
+      items.forEach((item) => { item.hidden = true; });
+      paginar(correspondem);
+
+      clearButtons.forEach((button) => { button.hidden = !blogSearch.value; });
+      if (emptyEl) emptyEl.hidden = shown > 0;
+
+      if (countEl) {
+        const plural = shown === 1 ? 'artigo' : 'artigos';
+        countEl.innerHTML = query
+          ? `<b>${shown}</b> ${plural} para “${blogSearch.value.trim()}”`
+          : `<b>${shown}</b> ${plural} publicados`;
+      }
+    };
+
+    // Buscar sempre volta para a primeira página: continuar na página 2 de um filtro novo
+    // mostraria uma tela vazia com resultados existindo logo acima.
+    const buscar = () => {
+      pagina = 1;
+      apply();
+    };
+
+    blogSearch.addEventListener('input', buscar);
+    blogSearch.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && blogSearch.value) {
+        blogSearch.value = '';
+        buscar();
+      }
+    });
+
+    clearButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        blogSearch.value = '';
+        buscar();
+        blogSearch.focus();
+      });
+    });
+
+    if (pagesEl) {
+      pagesEl.addEventListener('click', (event) => {
+        const botao = event.target.closest('[data-pagina]');
+        if (!botao) return;
+        pagina = Number(botao.dataset.pagina);
+        apply();
+        // Sem isto o clique troca cartões fora do campo de visão: os botões ficam no fim da
+        // grade, e a página nova começa lá em cima. 120px descontam o cabeçalho fixo.
+        window.scrollTo({ top: gridEl.getBoundingClientRect().top + window.scrollY - 120, behavior: 'smooth' });
+      });
+    }
+
+    // Permite que as páginas de categoria mandem o visitante para a busca já preenchida.
+    const fromUrl = new URLSearchParams(window.location.search).get('q');
+    if (fromUrl) blogSearch.value = fromUrl;
+
+    apply();
+    primeiraPassada = false;
+  }
+
   document.querySelectorAll('[data-year]').forEach((element) => {
     element.textContent = String(new Date().getFullYear());
   });

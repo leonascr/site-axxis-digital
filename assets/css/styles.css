@@ -136,21 +136,12 @@ p {
 .kicker {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
   margin-bottom: 16px;
   color: var(--orange);
   font-size: 12px;
   font-weight: 800;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-}
-
-.kicker::before {
-  width: 28px;
-  height: 2px;
-  border-radius: 999px;
-  background: currentColor;
-  content: '';
 }
 
 .kicker-light {
@@ -2866,9 +2857,11 @@ body[data-page="como"] .cta-card-photo {
    mega-menu on every page links to segmentos.html#consultoria and friends. */
 /* Same reasoning as `.services-preview + .section`: the page hero already ends with 84px of
    its own padding, so the full 112px here put 196px between the hero copy and the segments
-   heading. Scoped to this page — the other page-hero layouts are not being changed. */
+   heading. Scoped to this page: the other page-hero layouts are not being changed. */
+/* 34px, e nao os 72 anteriores: o botao "Encontrar meu segmento" da hero aponta para esta
+   secao, entao ela precisa estar quase colada. Sobram ~63px do fim da hero ate o kicker. */
 body[data-page="segmentos"] .page-hero + .section {
-  padding-top: 72px;
+  padding-top: 34px;
 }
 
 /* Carousel: a horizontal snap track. Cards keep a FIXED height — on hover the photo pane
@@ -2959,23 +2952,24 @@ body[data-page="segmentos"] .page-hero + .section {
   align-items: flex-end;
   justify-content: center;
   overflow: hidden;
-  /* Both stops are straight tints of --orange (#ff7014, hue 23.5), so the pane reads as the
-     brand colour. It used to run from hue 26 to #f4f6fa at hue 220 — a cool blue-grey — and
-     the blend between them passed through desaturated mauve, which is what made the cards
-     look pink next to the orange in the heading. Matching the hue alone was not enough: at
-     0.16 saturation the pane still read as cream rather than orange, so the stops carry
-     0.34 / 0.15 — plainly the brand colour, without out-shouting the person in the photo. */
-  background: linear-gradient(158deg, #ffcaa8 0%, #ffe8d9 78%);
+  /* Só o azul da casa, do --navy-3 ao --navy. Os dois tons vêm dos tokens, então o painel
+     acompanha qualquer mudança de marca sem valor solto aqui. O laranja do cartão fica por
+     conta dos marcadores da lista e do link, que são o que pede clique. */
+  background: linear-gradient(158deg, var(--navy-3) 0%, var(--navy) 100%);
 }
 
+/* A marca da casa no lugar do círculo genérico, mesma troca já feita na faixa da newsletter.
+   Agora que o painel é navy, vale a mesma versão branca da faixa da newsletter. A opacidade
+   fica no CSS para poder ser ajustada sem regerar a imagem. Sai pelas duas bordas, como o círculo saía, para não virar
+   um selo centralizado atrás da pessoa. */
 .segment-person-photo::after {
   position: absolute;
-  right: -42px;
-  bottom: -86px;
-  width: 190px;
-  height: 190px;
-  border-radius: 50%;
-  background: rgba(255, 112, 20, 0.14);
+  right: -46px;
+  bottom: -48px;
+  width: 304px;
+  height: 199px;
+  opacity: 0.11;
+  background: url('../img/marca-xx-branca.webp') no-repeat center / contain;
   content: '';
 }
 
@@ -3002,8 +2996,11 @@ body[data-page="segmentos"] .page-hero + .section {
   height: 28px;
   padding: 0;
   border-radius: 0;
+  /* Branco, e não o laranja herdado de .icon: sobre o navy o laranja a esta opacidade
+     praticamente desaparecia. */
+  color: #fff;
   background: none;
-  opacity: 0.2;
+  opacity: 0.3;
 }
 
 /* For source photos whose subjects run off the canvas edge, floating them centred makes the
@@ -3687,41 +3684,28 @@ body[data-page="conteudos"] .page-hero + .section {
   max-width: 720px;
 }
 
-.article-byline {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 14px;
-  margin-top: 30px;
-}
-
-.article-byline img {
-  width: 46px;
-  height: 46px;
-  flex: 0 0 auto;
-  padding: 8px;
-  border: 1px solid var(--line);
-  border-radius: 50%;
-  background: var(--white);
-  object-fit: contain;
-}
-
-.article-byline-name {
-  display: block;
-  color: var(--navy);
-  font-size: 14px;
-  font-weight: 800;
-}
-
-.article-byline-role {
-  display: block;
-  color: var(--muted);
-  font-size: 13px;
+/* Sem assinatura e sem tempo de leitura: sobra a data, que e o unico dado do topo que o
+   leitor usa de fato para decidir se o texto ainda vale. */
+.page-hero--article .article-meta {
+  margin-top: 28px;
 }
 
 /* Dot-separated run of date / reading time. The separator is a pseudo-element on every span
    after the first, so the author can add or drop a field without touching punctuation.
    Shared by the article hero, the featured card and the grid cards. */
+/* Nos cartoes a meta tem que caber numa linha: quebrada em duas ela vira ruido visual e
+   empurra o resto do cartao. nowrap aqui, wrap continua valendo no artigo. */
+.blog-card .article-meta { flex-wrap: nowrap; font-size: 12.5px; }
+
+/* Resumo travado em duas linhas: cartões de altura igual varrem melhor do que cartões que
+   sobem e descem conforme o tamanho do texto. */
+.blog-card-body > p {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
 .article-meta {
   display: flex;
   flex-wrap: wrap;
@@ -3962,41 +3946,6 @@ body[data-page="conteudos"] .page-hero + .section {
   color: var(--orange);
 }
 
-.article-author {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  margin-top: 50px;
-  padding: 26px 28px;
-  border: 1px solid var(--line);
-  border-radius: 24px;
-  background: var(--white);
-  box-shadow: var(--shadow-sm);
-}
-
-.article-author img {
-  width: 64px;
-  height: 64px;
-  flex: 0 0 auto;
-  padding: 11px;
-  border: 1px solid var(--line);
-  border-radius: 50%;
-  background: var(--soft);
-  object-fit: contain;
-}
-
-.article-author h3 {
-  color: var(--navy);
-  font-size: 18px;
-}
-
-.article-author p {
-  margin-top: 8px;
-  color: var(--muted);
-  font-size: 14px;
-  line-height: 1.65;
-}
-
 /* Category chips. Real links to the category pages, not a JS filter: a hidden card never
    intersects, and the reveal observer runs once and unobserves, so anything filtered out and
    brought back would be stuck at opacity 0. A page per category is also the only version
@@ -4035,60 +3984,23 @@ body[data-page="conteudos"] .page-hero + .section {
   background: var(--navy);
 }
 
-.blog-featured {
-  display: grid;
-  grid-template-columns: 1fr 0.92fr;
+/* Assinatura nos cartões. Um blog sem autor visível parece gerado; com autor, parece escrito
+   por alguém — e é o mesmo campo que o gerador vai preencher quando a esteira existir. */
+.blog-author {
+  display: inline-flex;
   align-items: center;
-  gap: 44px;
-  padding: 30px;
-  border: 1px solid var(--line);
-  border-radius: 30px;
-  background: var(--white);
-  transition: border-color 0.25s ease, box-shadow 0.25s ease;
-}
-
-/* No translateY here, unlike .blog-card: at this size the 6px lift reads as the whole page
-   jumping rather than a card responding. */
-.blog-featured:hover {
-  border-color: rgba(255, 112, 20, 0.35);
-  box-shadow: var(--shadow-md);
-}
-
-.blog-featured-copy {
-  padding: 14px 8px 14px 22px;
-}
-
-.blog-featured-copy .tag {
-  margin-bottom: 18px;
-}
-
-.blog-featured h2 {
+  gap: 7px;
   color: var(--navy);
-  font-size: clamp(1.9rem, 2.6vw, 2.6rem);
 }
 
-.blog-featured-copy > p {
-  margin-top: 16px;
-  font-size: 16px;
-}
-
-.blog-featured .article-meta {
-  margin-top: 22px;
-}
-
-.blog-featured .text-link {
-  margin-top: 22px;
-}
-
-.blog-featured:hover .text-link::after {
-  transform: translateX(5px);
-}
-
-.blog-featured-media img {
-  width: 100%;
-  aspect-ratio: 4 / 3;
-  border-radius: 22px;
-  object-fit: cover;
+.blog-author img {
+  width: 23px;
+  height: 23px;
+  flex: 0 0 auto;
+  padding: 3px;
+  border-radius: 50%;
+  background: var(--soft);
+  object-fit: contain;
 }
 
 /* Fixed three-column count, like every other grid in this file — no auto-fit/minmax. */
@@ -4169,6 +4081,323 @@ body[data-page="conteudos"] .page-hero + .section {
 }
 
 
+/* Busca do blog. Um campo grande no topo é o gesto que faz uma listagem parecer um blog e
+   não um catálogo — e resolve o problema real de achar um assunto quando a lista crescer. */
+.blog-toolbar {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 22px;
+}
+
+.blog-search {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.blog-search > svg {
+  position: absolute;
+  left: 19px;
+  width: 19px;
+  height: 19px;
+  fill: none;
+  stroke: var(--muted);
+  stroke-width: 2;
+  stroke-linecap: round;
+  pointer-events: none;
+}
+
+.blog-search input {
+  width: 100%;
+  padding: 17px 48px 17px 50px;
+  border: 1px solid var(--line);
+  border-radius: 15px;
+  color: var(--ink);
+  background: var(--white);
+  font-family: inherit;
+  font-size: 15.5px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.blog-search input::placeholder { color: #9a9eb0; }
+
+.blog-search input:focus {
+  outline: none;
+  border-color: var(--orange);
+  box-shadow: 0 0 0 4px rgba(255, 112, 20, 0.13);
+}
+
+/* O X nativo do type=search some entre navegadores; este é o nosso, sempre igual. */
+.blog-search input::-webkit-search-cancel-button { display: none; }
+
+.blog-search-clear {
+  position: absolute;
+  right: 13px;
+  width: 27px;
+  height: 27px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  color: var(--muted);
+  background: var(--soft);
+  font-size: 15px;
+  line-height: 1;
+  cursor: pointer;
+  transition: color 0.18s ease, background 0.18s ease;
+}
+
+/* display:grid vence o [hidden] do navegador por ser regra de autor, então o atributo
+   sozinho não escondia o botão — o X ficava visível com o campo vazio. */
+.blog-search-clear[hidden] { display: none; }
+
+.blog-search-clear:hover { color: var(--white); background: var(--navy); }
+.blog-search-clear:focus-visible { outline: 2px solid var(--orange); outline-offset: 2px; }
+
+.blog-count {
+  margin-bottom: 26px;
+  color: var(--muted);
+  font-size: 13.5px;
+}
+
+.blog-count b { color: var(--navy); font-weight: 700; }
+
+.blog-empty {
+  padding: 58px 26px;
+  border: 1px dashed var(--line);
+  border-radius: 22px;
+  text-align: center;
+}
+
+.blog-empty h3 {
+  color: var(--navy);
+  font-size: 21px;
+}
+
+.blog-empty p {
+  max-width: 42ch;
+  margin: 10px auto 0;
+  color: var(--muted);
+  font-size: 14.5px;
+}
+
+.blog-empty button {
+  padding: 0;
+  border: 0;
+  color: var(--orange);
+  background: none;
+  font: inherit;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+/* Newsletter. Pedido único e de baixo compromisso — um campo só. Fica separada do formulário
+   de contato de propósito: quem está lendo conteúdo raramente quer agendar uma conversa, mas
+   costuma aceitar receber o próximo texto. */
+/* Faixa de largura total, não um cartão dentro do container. E ela sobe para dentro do
+   respiro da seção acima: a assinatura precisa estar no campo de visão de quem acabou de ler
+   os títulos, não a uma rolagem de distância deles. */
+.newsletter-band {
+  position: relative;
+  overflow: hidden;
+  margin-top: -58px;
+  padding: 66px 0 74px;
+  color: var(--white);
+  /* O segundo azul. O --navy sozinho é quase preto e achata a faixa inteira; o azul de fundo
+     dá profundidade e é o mesmo tom da família --navy-2/--navy-3 já usada no site. */
+  background: linear-gradient(118deg, var(--navy) 0%, #101653 46%, #182073 100%);
+}
+
+/* A marca da casa no lugar do círculo genérico. Monocromática e a 7%: o laranja fica
+   reservado para o botão, que é a única coisa aqui que pede um clique. */
+.newsletter-band::before {
+  position: absolute;
+  top: 7%;
+  right: -34px;
+  bottom: 7%;
+  width: 46%;
+  opacity: 0.07;
+  /* `auto 100%` amarra a altura da marca a altura da caixa, e a caixa e uma fracao da faixa:
+     assim a marca acompanha qualquer altura de bloco sem virar mancha. Com `contain` o
+     resultado dependeria da proporcao da faixa e mudaria sozinho no celular. */
+  background: url('../img/marca-xx-branca.webp') no-repeat right center / auto 100%;
+  content: '';
+}
+
+.newsletter {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1.02fr 0.98fr;
+  gap: 46px;
+  align-items: center;
+}
+
+.newsletter-copy,
+.newsletter-form { position: relative; z-index: 1; }
+
+.newsletter-copy h2 {
+  margin-top: 16px;
+  color: var(--white);
+  font-size: clamp(1.7rem, 2.6vw, 2.3rem);
+}
+
+.newsletter-copy h2 strong { color: var(--orange); font-weight: inherit; }
+
+.newsletter-copy > p {
+  max-width: 46ch;
+  margin-top: 14px;
+  color: #b9bdd8;
+  font-size: 15.5px;
+}
+
+.newsletter-fields {
+  display: flex;
+  gap: 10px;
+}
+
+.newsletter-fields input {
+  flex: 1;
+  min-width: 0;
+  padding: 15px 18px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 13px;
+  color: var(--white);
+  background: rgba(255, 255, 255, 0.07);
+  font-family: inherit;
+  font-size: 15px;
+}
+
+.newsletter-fields input::placeholder { color: #8b90ad; }
+
+.newsletter-fields input:focus {
+  outline: none;
+  border-color: var(--orange);
+  background: rgba(255, 255, 255, 0.11);
+}
+
+.newsletter-fields .btn { flex: 0 0 auto; }
+
+.newsletter-note {
+  margin-top: 13px;
+  color: #8b90ad;
+  font-size: 12.5px;
+}
+
+.newsletter .form-success { margin-top: 13px; }
+
+/* Faixa enxuta no fim do artigo: mesmo pedido, sem competir com o CTA de conversa que vem
+   logo abaixo. */
+/* Dentro do artigo a faixa rompe a coluna de leitura de 760px e ocupa a janela inteira. É
+   uma pausa deliberada no meio do texto: quem chegou até aqui já investiu atenção, e é o
+   ponto em que assinar faz mais sentido do que no fim, quando a pessoa já saiu. */
+.newsletter-band--inline {
+  width: 100vw;
+  margin: 60px 0 60px calc(50% - 50vw);
+  padding: 46px 0 50px;
+}
+
+.newsletter-band--inline .newsletter {
+  width: min(1180px, calc(100% - 40px));
+  margin-inline: auto;
+}
+
+.newsletter-band--slim { margin-top: 0; padding: 52px 0 56px; }
+
+.newsletter--slim {
+  grid-template-columns: 1fr;
+  gap: 22px;
+}
+
+.newsletter--slim .newsletter-copy h2 { margin-top: 12px; font-size: 1.45rem; }
+.newsletter--slim .newsletter-copy > p { margin-top: 10px; font-size: 14.5px; }
+
+/* Hero da aba Conteúdos: foto de fundo com sobreposição navy. A mesma técnica do depoimento
+   da home — dois planos de fundo na mesma propriedade, gradiente por cima da imagem — para o
+   texto manter contraste AA sem depender de como a foto é em cada trecho. */
+body[data-page="conteudos"] .page-hero {
+  background:
+    linear-gradient(100deg, rgba(5, 6, 62, 0.93) 0%, rgba(5, 6, 62, 0.86) 45%, rgba(16, 22, 83, 0.72) 100%),
+    url('../img/hero-conteudos.webp') no-repeat center / cover;
+}
+
+body[data-page="conteudos"] .page-hero::before,
+body[data-page="conteudos"] .page-hero::after { display: none; }
+
+body[data-page="conteudos"] .page-hero h1 { color: var(--white); }
+/* O tamanho compartilhado (ate 5.3rem) foi calibrado para titulo de duas palavras. Aqui a
+   frase e longa e sobre foto: 3.6rem cabe em duas linhas e deixa a imagem respirar. O :not
+   preserva o tamanho proprio das materias, que ja tem regra dedicada. */
+body[data-page="conteudos"] .page-hero:not(.page-hero--article) .page-hero-copy h1 {
+  font-size: clamp(2.3rem, 4.1vw, 3.6rem);
+}
+body[data-page="conteudos"] .page-hero-copy > p { color: #c8cbdd; }
+/* A data herda o cinza de corpo de texto, que sobre a foto escurecida some. */
+body[data-page="conteudos"] .page-hero .article-meta { color: #a9adc6; }
+body[data-page="conteudos"] .page-hero .breadcrumbs,
+body[data-page="conteudos"] .page-hero .breadcrumbs a { color: #a9adc6; }
+body[data-page="conteudos"] .page-hero .breadcrumbs a:hover { color: var(--white); }
+
+/* "Continue lendo" perdeu o titulo, entao o respiro de secao inteiro deixaria um vazio
+   exatamente onde o h2 estava. Menos padding em cima aproxima os cartoes do fim do texto,
+   que e o que o leitor esta procurando quando chega ali. */
+.related-posts {
+  padding-top: 62px;
+}
+
+.related-posts .section-heading {
+  margin-bottom: 26px;
+}
+
+.related-posts .kicker {
+  margin-bottom: 0;
+}
+
+/* Paginacao. Os botoes sao <button>, e nao links: a troca de pagina acontece no cliente,
+   sobre a lista ja filtrada pela busca, e um href apontaria para um endereco que nao existe. */
+.blog-pagination {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 52px;
+}
+
+/* display:flex e regra de autor e venceria o [hidden] do navegador. */
+.blog-pagination[hidden] { display: none; }
+
+.blog-page {
+  min-width: 46px;
+  height: 46px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  color: var(--navy);
+  background: var(--white);
+  font-family: inherit;
+  font-size: 14.5px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+}
+
+.blog-page:hover {
+  border-color: var(--orange);
+  color: var(--orange);
+}
+
+.blog-page.is-active {
+  border-color: var(--navy);
+  color: var(--white);
+  background: var(--navy);
+  cursor: default;
+}
+
 /* Reveal */
 .reveal {
   opacity: 0;
@@ -4203,9 +4432,7 @@ body[data-page="conteudos"] .page-hero + .section {
   .services-preview-photo { display: none; }
   .service-stack { flex-wrap: wrap; gap: 18px; }
   .service-stack .service-card { flex: 1 1 240px; width: auto; margin-right: 0; }
-  .blog-featured { gap: 32px; }
-  .blog-featured-copy { padding: 10px 4px 10px 14px; }
-}
+    }
 
 @media (max-width: 980px) {
   .utility-bar { display: none; }
@@ -4498,15 +4725,12 @@ body[data-page="conteudos"] .page-hero + .section {
   .service-panel-top { grid-template-columns: 1fr; }
   .about-story img { width: min(700px, 100%); margin-inline: auto; }
   .blog-grid { grid-template-columns: repeat(2, 1fr); }
-  .blog-featured { grid-template-columns: 1fr; gap: 26px; padding: 20px; }
-  .blog-featured-media { order: -1; }
-  .blog-featured-copy { padding: 6px 10px 14px; }
-  .page-hero--article .page-hero-copy h1 { font-size: clamp(2.1rem, 4.8vw, 2.9rem); }
-  /* .page-hero-copy goes text-align:center at this width, so the two flex rows in the byline
-     have to be re-centred by hand — text-align does not move flex items. Scoped to the hero:
-     the same .article-meta also lives inside the cards, which stay left-aligned. */
-  .page-hero--article .article-byline { justify-content: center; }
+        .page-hero--article .page-hero-copy h1 { font-size: clamp(2.1rem, 4.8vw, 2.9rem); }
+  /* .page-hero-copy fica text-align:center nesta largura, e text-align nao move item de
+     flex: a data precisa ser recentrada na mao. Escopo no hero, porque a mesma .article-meta
+     vive dentro dos cartoes, que continuam alinhados a esquerda. */
   .page-hero--article .article-meta { justify-content: center; }
+      .newsletter { grid-template-columns: 1fr; gap: 30px; }
 }
 
 /* The global reduced-motion block zeroes animation-duration but not animation-delay,
@@ -4554,7 +4778,7 @@ body[data-page="conteudos"] .page-hero + .section {
   .segments-grid, .service-grid, .dual-experience, .about-values, .contact-options { grid-template-columns: 1fr; }
   /* Phones start from a smaller base (78px, not 112px), so the desktop value would barely
      move anything here. This keeps the reduction proportional on both. */
-  body[data-page="segmentos"] .page-hero + .section { padding-top: 50px; }
+  body[data-page="segmentos"] .page-hero + .section { padding-top: 28px; }
   /* Phone: cards fill the viewport width and the arrows go away — swiping is the control. */
   /* Touch has no hover, so there is no shadow to clear here — the padding/negative-margin
      pair the desktop track needs is undone rather than carried over. */
@@ -4695,7 +4919,6 @@ body[data-page="conteudos"] .page-hero + .section {
   .legal-content li { padding-left: 16px; position: relative; }
   .legal-content li::before { content: '•'; position: absolute; left: 0; color: var(--orange); font-weight: 700; }
   /* Home, phone only: trim hero/FAQ ornamentation that adds noise on a narrow screen. */
-  body[data-page="home"] .eyebrow span { display: none; }
   body[data-page="home"] .hero-actions .btn-primary > span { display: none; }
   body[data-page="home"] .faq-intro > p,
   body[data-page="home"] .faq-intro > .text-link { display: none; }
@@ -4714,7 +4937,15 @@ body[data-page="conteudos"] .page-hero + .section {
   .article-quote { margin-top: 34px; padding-left: 18px; font-size: 19px; }
   .article-figure img { border-radius: 16px; }
   .article-callout { padding: 22px; }
-  .article-author { flex-direction: column; align-items: flex-start; gap: 16px; padding: 22px; }
+  .newsletter-band { margin-top: -40px; padding: 48px 0 54px; }
+  /* Na largura do celular a faixa fica alta e a marca, esticada de ponta a ponta, ficaria mais
+     larga que a tela. Centralizada, o corte cai simetrico no cruzamento dos dois X, que e a
+     parte reconhecivel; ancorada a direita, sobrava so uma diagonal solta. */
+  .newsletter-band::before { right: 0; left: 0; width: auto; background-position: center; }
+  .newsletter-fields { flex-direction: column; }
+  .newsletter-fields .btn { width: 100%; justify-content: center; }
+      .blog-search input { padding: 15px 44px 15px 46px; font-size: 15px; }
+  .blog-empty { padding: 42px 18px; }
 }
 
 @media (max-width: 480px) {
@@ -4726,8 +4957,7 @@ body[data-page="conteudos"] .page-hero + .section {
   .hero-proof { display: grid; justify-items: start; }
   .service-card { min-height: 290px; }
   .blog-card h3 { font-size: 18px; }
-  .blog-featured h2 { font-size: 1.7rem; }
-  .article-body p, .article-body li { font-size: 15px; }
+    .article-body p, .article-body li { font-size: 15px; }
   .article-share { gap: 8px; }
   .article-share a { padding: 0 13px; font-size: 12px; }
 }
@@ -5316,19 +5546,11 @@ body[data-page="home"] .hero-copy {
 body[data-page="home"] .eyebrow {
   display: flex;
   align-items: center;
-  gap: 9px;
   color: #ff7200;
   font-size: 12px;
   font-weight: 800;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-}
-
-body[data-page="home"] .eyebrow span {
-  width: 28px;
-  height: 2px;
-  flex: 0 0 auto;
-  background: #ff7200;
 }
 
 body[data-page="home"] .hero h1 {
