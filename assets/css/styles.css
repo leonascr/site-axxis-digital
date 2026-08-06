@@ -2952,24 +2952,29 @@ body[data-page="segmentos"] .page-hero + .section {
   align-items: flex-end;
   justify-content: center;
   overflow: hidden;
-  /* Só o azul da casa, do --navy-3 ao --navy. Os dois tons vêm dos tokens, então o painel
-     acompanha qualquer mudança de marca sem valor solto aqui. O laranja do cartão fica por
-     conta dos marcadores da lista e do link, que são o que pede clique. */
-  background: linear-gradient(158deg, var(--navy-3) 0%, var(--navy) 100%);
+  /* Both stops are straight tints of --orange (#ff7014, hue 23.5), so the pane reads as the
+     brand colour. It used to run from hue 26 to #f4f6fa at hue 220, a cool blue-grey, and
+     the blend between them passed through desaturated mauve, which is what made the cards
+     look pink next to the orange in the heading. Matching the hue alone was not enough: at
+     0.16 saturation the pane still read as cream rather than orange, so the stops carry
+     0.34 / 0.15, plainly the brand colour, without out-shouting the person in the photo. */
+  background: linear-gradient(158deg, #ffcaa8 0%, #ffe8d9 78%);
 }
 
 /* A marca da casa no lugar do círculo genérico, mesma troca já feita na faixa da newsletter.
-   Agora que o painel é navy, vale a mesma versão branca da faixa da newsletter. A opacidade
-   fica no CSS para poder ser ajustada sem regerar a imagem. Sai pelas duas bordas, como o círculo saía, para não virar
-   um selo centralizado atrás da pessoa. */
+   Sobre o painel claro vale a versão chapada no laranja da marca, não a branca da faixa. A
+   opacidade fica no CSS para poder ser ajustada sem regerar a imagem: 0.17 aqui, porque
+   laranja sobre pêssego tem pouco contraste e acima disso a marca vira desenho em vez de
+   textura. Sai pelas duas bordas, como o círculo saía, para não virar um selo centralizado
+   atrás da pessoa. */
 .segment-person-photo::after {
   position: absolute;
   right: -46px;
   bottom: -48px;
   width: 304px;
   height: 199px;
-  opacity: 0.11;
-  background: url('../img/marca-xx-branca.webp') no-repeat center / contain;
+  opacity: 0.17;
+  background: url('../img/marca-xx-laranja.webp') no-repeat center / contain;
   content: '';
 }
 
@@ -2996,11 +3001,8 @@ body[data-page="segmentos"] .page-hero + .section {
   height: 28px;
   padding: 0;
   border-radius: 0;
-  /* Branco, e não o laranja herdado de .icon: sobre o navy o laranja a esta opacidade
-     praticamente desaparecia. */
-  color: #fff;
   background: none;
-  opacity: 0.3;
+  opacity: 0.2;
 }
 
 /* For source photos whose subjects run off the canvas edge, floating them centred makes the
