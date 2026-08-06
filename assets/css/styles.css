@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap');
 
 :root {
   --navy: #05063e;
@@ -52,6 +51,15 @@ img,
 svg {
   display: block;
   max-width: 100%;
+}
+
+/* Contraparte obrigatória dos atributos width/height que toda <img> passou a carregar. Eles
+   existem para o navegador reservar o espaço antes do download e evitar que a página pule
+   (CLS), mas sem isto o height do atributo viraria a altura usada e a imagem esticaria. Com
+   `height: auto` o navegador usa os dois números só para calcular a proporção. Especificidade
+   mínima de propósito: qualquer regra que defina altura de verdade continua vencendo. */
+img {
+  height: auto;
 }
 
 a {
@@ -209,15 +217,17 @@ p {
   transform: translateY(-2px);
 }
 
+/* Sombra a 40% do que era (0.26 e 0.34). A geometria continua a mesma: só a opacidade caiu,
+   então o botão mantém o volume sem projetar uma segunda mancha laranja embaixo dele. */
 .btn-primary {
   color: var(--white);
   background: var(--orange);
-  box-shadow: 0 14px 30px rgba(255, 112, 20, 0.26);
+  box-shadow: 0 14px 30px rgba(255, 112, 20, 0.1);
 }
 
 .btn-primary:hover {
   background: #ef650a;
-  box-shadow: 0 18px 36px rgba(255, 112, 20, 0.34);
+  box-shadow: 0 18px 36px rgba(255, 112, 20, 0.14);
 }
 
 .btn-secondary {
@@ -705,7 +715,7 @@ p {
 .hero h1 {
   max-width: 680px;
   color: var(--navy);
-  font-size: clamp(3.25rem, 5.8vw, 5.7rem);
+  font-size: clamp(3rem, 5.35vw, 5.25rem);
   line-height: 0.98;
 }
 
@@ -2485,38 +2495,72 @@ body[data-page="como"] .cta-card-photo {
   gap: 22px;
 }
 
+/* Em repouso é só um círculo com o ícone: 15px de padding de cada lado mais os 24px do ícone
+   fecham exatamente os 54px de altura. Não há largura declarada de propósito — o botão é
+   dimensionado pelo conteúdo, e quem cresce no hover é o rótulo. Assim não existe número
+   mágico para a largura do texto, que mudaria se a frase mudasse. */
 .floating-contact {
   position: fixed;
   right: 22px;
   bottom: 22px;
   z-index: 50;
-  min-height: 50px;
+  height: 54px;
   display: inline-flex;
   align-items: center;
-  gap: 9px;
-  padding: 0 17px;
+  padding: 0 15px;
   border-radius: 999px;
   color: var(--white);
   background: var(--orange);
-  box-shadow: 0 16px 40px rgba(255, 112, 20, 0.34);
+  box-shadow: 0 16px 40px rgba(255, 112, 20, 0.14);
   font-size: 13px;
   font-weight: 800;
-  transition: transform 0.2s ease;
-}
-
-.floating-contact:hover {
-  transform: translateY(-3px);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .floating-contact i {
   width: 24px;
   height: 24px;
+  flex: 0 0 auto;
   display: grid;
   place-items: center;
   border-radius: 50%;
-  color: var(--orange);
-  background: var(--white);
+  color: var(--white);
+  background: transparent;
+  font-size: 16px;
   font-style: normal;
+  transition: color 0.25s ease, background 0.25s ease;
+}
+
+/* `max-width` anima; `width: auto` não. Zerar a largura máxima do rótulo e abri-la no hover
+   é o que permite o botão crescer sozinho até o tamanho do texto, seja ele qual for. */
+.floating-contact span {
+  max-width: 0;
+  overflow: hidden;
+  opacity: 0;
+  white-space: nowrap;
+  transition: max-width 0.3s ease, opacity 0.22s ease, margin-left 0.3s ease;
+}
+
+/* Só onde existe ponteiro de verdade. No celular o hover fica grudado depois do toque, e o
+   botão abriria sozinho sobre o conteúdo sem nunca mais fechar. */
+@media (hover: hover) {
+  .floating-contact:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 18px 44px rgba(255, 112, 20, 0.2);
+  }
+
+  .floating-contact:hover span,
+  .floating-contact:focus-visible span {
+    max-width: 220px;
+    margin-left: 9px;
+    opacity: 1;
+  }
+
+  .floating-contact:hover i,
+  .floating-contact:focus-visible i {
+    color: var(--orange);
+    background: var(--white);
+  }
 }
 
 /* Internal pages */
@@ -2548,9 +2592,12 @@ body[data-page="como"] .cta-card-photo {
   gap: 64px;
 }
 
+/* Mesma escala do h1 da hero da home (clamp(40px, 4.6vw, 61px)). Antes as paginas internas
+   corriam ate 4.85rem, maiores que a propria home, o que fazia a home parecer a pagina
+   secundaria. Ficar na mesma curva mantem o titulo do mesmo tamanho em qualquer largura. */
 .page-hero-copy h1 {
   color: var(--navy);
-  font-size: clamp(3rem, 5.5vw, 5.3rem);
+  font-size: clamp(40px, 4.6vw, 61px);
 }
 
 .page-hero-copy h1 strong {
@@ -2858,10 +2905,28 @@ body[data-page="como"] .cta-card-photo {
 /* Same reasoning as `.services-preview + .section`: the page hero already ends with 84px of
    its own padding, so the full 112px here put 196px between the hero copy and the segments
    heading. Scoped to this page: the other page-hero layouts are not being changed. */
-/* 34px, e nao os 72 anteriores: o botao "Encontrar meu segmento" da hero aponta para esta
-   secao, entao ela precisa estar quase colada. Sobram ~63px do fim da hero ate o kicker. */
+/* 14px, e nao os 72 originais: o botao "Encontrar meu segmento" da hero aponta para esta
+   secao, entao ela precisa estar quase colada. Sobram ~43px do fim da hero ate o kicker, que
+   e o minimo para o titulo nao encostar no cabecalho fixo quando o link ancora ate aqui. */
+/* O que separava a hero do carrossel nao era o padding da secao, e sim os 84px de baixo da
+   propria hero: mesmo com 14px em cima da secao sobravam 98px. Cortar os dois e o que
+   aproxima de verdade. Fundo da hero e da secao sao o mesmo --soft, entao os dois blocos
+   leem como um so e nao precisam de respiro para se separar. */
+body[data-page="segmentos"] .page-hero {
+  padding-bottom: 50px;
+}
+
 body[data-page="segmentos"] .page-hero + .section {
-  padding-top: 34px;
+  padding-top: 14px;
+}
+
+/* A pagina inteira respira menos que o padrao de 112px. Sao quatro secoes curtas em sequencia
+   (carrossel, o que analisamos, duvidas, CTA) e no ritmo global elas ficavam a 140-200px umas
+   das outras, o que obriga a rolar muito para pouco conteudo. `padding-block` so mexe no eixo
+   vertical: o recuo lateral do .section continua sendo o do container. A regra do carrossel
+   acima e mais especifica, entao o padding-top de 14px dele sobrevive a esta. */
+body[data-page="segmentos"] .section {
+  padding-block: 76px;
 }
 
 /* Carousel: a horizontal snap track. Cards keep a FIXED height — on hover the photo pane
@@ -3679,7 +3744,7 @@ body[data-page="conteudos"] .page-hero + .section {
    mock title ran to five lines on a 1440 screen. */
 .page-hero--article .page-hero-copy h1 {
   max-width: 880px;
-  font-size: clamp(2.2rem, 3.6vw, 3.4rem);
+  font-size: clamp(2rem, 3.3vw, 3.1rem);
 }
 
 .page-hero--article .page-hero-copy > p {
@@ -4336,7 +4401,7 @@ body[data-page="conteudos"] .page-hero h1 { color: var(--white); }
    frase e longa e sobre foto: 3.6rem cabe em duas linhas e deixa a imagem respirar. O :not
    preserva o tamanho proprio das materias, que ja tem regra dedicada. */
 body[data-page="conteudos"] .page-hero:not(.page-hero--article) .page-hero-copy h1 {
-  font-size: clamp(2.3rem, 4.1vw, 3.6rem);
+  font-size: clamp(2.1rem, 3.75vw, 3.3rem);
 }
 body[data-page="conteudos"] .page-hero-copy > p { color: #c8cbdd; }
 /* A data herda o cinza de corpo de texto, que sobre a foto escurecida some. */
@@ -4727,7 +4792,7 @@ body[data-page="conteudos"] .page-hero .breadcrumbs a:hover { color: var(--white
   .service-panel-top { grid-template-columns: 1fr; }
   .about-story img { width: min(700px, 100%); margin-inline: auto; }
   .blog-grid { grid-template-columns: repeat(2, 1fr); }
-        .page-hero--article .page-hero-copy h1 { font-size: clamp(2.1rem, 4.8vw, 2.9rem); }
+        .page-hero--article .page-hero-copy h1 { font-size: clamp(1.95rem, 4.4vw, 2.65rem); }
   /* .page-hero-copy fica text-align:center nesta largura, e text-align nao move item de
      flex: a data precisa ser recentrada na mao. Escopo no hero, porque a mesma .article-meta
      vive dentro dos cartoes, que continuam alinhados a esquerda. */
@@ -4753,7 +4818,7 @@ body[data-page="conteudos"] .page-hero .breadcrumbs a:hover { color: var(--white
   .section-heading p { font-size: 16px; }
   .brand { width: 136px; }
   .hero { padding: 45px 0 38px; }
-  .hero h1 { font-size: clamp(2.7rem, 14vw, 4.2rem); }
+  .hero h1 { font-size: clamp(2.5rem, 12.8vw, 3.85rem); }
   .hero-copy > p { font-size: 17px; }
   .hero-actions { flex-direction: column; align-items: stretch; }
   .hero-actions .btn, .hero-actions .text-link { width: 100%; justify-content: center; }
@@ -4780,7 +4845,8 @@ body[data-page="conteudos"] .page-hero .breadcrumbs a:hover { color: var(--white
   .segments-grid, .service-grid, .dual-experience, .about-values, .contact-options { grid-template-columns: 1fr; }
   /* Phones start from a smaller base (78px, not 112px), so the desktop value would barely
      move anything here. This keeps the reduction proportional on both. */
-  body[data-page="segmentos"] .page-hero + .section { padding-top: 28px; }
+  body[data-page="segmentos"] .page-hero + .section { padding-top: 10px; }
+  body[data-page="segmentos"] .section { padding-block: 56px; }
   /* Phone: cards fill the viewport width and the arrows go away — swiping is the control. */
   /* Touch has no hover, so there is no shadow to clear here — the padding/negative-margin
      pair the desktop track needs is undone rather than carried over. */
@@ -4851,9 +4917,8 @@ body[data-page="conteudos"] .page-hero .breadcrumbs a:hover { color: var(--white
   .footer-grid { grid-template-columns: 1fr 1fr; gap: 35px 20px; }
   .footer-brand { grid-column: 1 / -1; }
   .footer-bottom { flex-direction: column; align-items: flex-start; justify-content: center; padding: 20px 0; }
-  .floating-contact { width: 52px; height: 52px; justify-content: center; padding: 0; }
-  .floating-contact span { display: none; }
-  .floating-contact i { background: transparent; color: var(--white); }
+  /* O círculo já é o estado base; aqui só encolhe um pouco para a tela do celular. */
+  .floating-contact { height: 50px; padding: 0 13px; }
   .cta-section { padding-bottom: 70px; }
   .site-footer { padding-bottom: 86px; }
   .table-scroll-hint { display: block; margin: 0 auto 14px; color: var(--muted); font-size: 12px; text-align: center; }
@@ -4861,7 +4926,6 @@ body[data-page="conteudos"] .page-hero .breadcrumbs a:hover { color: var(--white
   .comparison-table th, .comparison-table td { padding: 14px 12px; font-size: 12px; }
   .comparison-table th:first-child, .comparison-table td:first-child { min-width: 150px; }
   .page-hero { padding: 55px 0 60px; }
-  .page-hero-copy h1 { font-size: clamp(2.7rem, 13vw, 4.2rem); }
   .page-hero-card { min-height: 350px; }
   .page-hero-stat-grid { width: calc(100% - 36px); gap: 10px; }
   .page-stat { min-height: 120px; padding: 16px; }
@@ -5559,7 +5623,7 @@ body[data-page="home"] .hero h1 {
   max-width: none;
   margin: 18px 0 24px;
   color: #020735;
-  font-size: clamp(44px, 5vw, 67px);
+  font-size: clamp(40px, 4.6vw, 61px);
   line-height: 1.12;
   letter-spacing: -0.045em;
 }
@@ -5621,14 +5685,15 @@ body[data-page="home"] .play {
   font-size: 10px;
 }
 
-/* Lighter than the site-wide .btn-primary (0 14px 30px / .26). Sitting on the hero's pale
-   background the full-strength shadow read as a second orange shape under the button. */
+/* Lighter than the site-wide .btn-primary. Sitting on the hero's pale background the
+   full-strength shadow read as a second orange shape under the button. Cortada a 40% junto
+   com a global, para a hero continuar mais leve que o resto do site e não mais pesada. */
 body[data-page="home"] .hero .btn-primary {
-  box-shadow: 0 8px 18px rgba(255, 112, 20, 0.18);
+  box-shadow: 0 8px 18px rgba(255, 112, 20, 0.07);
 }
 
 body[data-page="home"] .hero .btn-primary:hover {
-  box-shadow: 0 12px 24px rgba(255, 112, 20, 0.24);
+  box-shadow: 0 12px 24px rgba(255, 112, 20, 0.1);
 }
 
 body[data-page="home"] .hero-proof {
@@ -6217,7 +6282,11 @@ body[data-page="home"] .trust-items i {
   }
 
   body[data-page="home"] .hero h1 {
-    font-size: 43px;
+    font-size: 40px;
+  }
+
+  .page-hero-copy h1 {
+    font-size: 40px;
   }
 
   body[data-page="home"] .hero-actions {
