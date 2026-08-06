@@ -21,6 +21,10 @@ const MIME_TYPES = {
   '.webp': 'image/webp',
   '.woff': 'font/woff',
   '.woff2': 'font/woff2',
+  // Sem estas duas, sitemap.xml e robots.txt saíam como application/octet-stream — os
+  // rastreadores não os liam, o que prejudicava a indexação do site inteiro, não só do blog.
+  '.xml': 'application/xml; charset=utf-8',
+  '.txt': 'text/plain; charset=utf-8',
 };
 
 const server = http.createServer((req, res) => {
