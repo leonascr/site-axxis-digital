@@ -431,11 +431,10 @@
 
     const haystack = new Map(items.map((item) => [item, normalize(item.textContent)]));
 
-    // Paginação. POR_PAGINA é o único número a mexer quando o acervo crescer: 3 mantém uma
-    // linha cheia na grade de três colunas e já rende duas páginas com os artigos de hoje.
-    // Ela pagina o resultado da busca, e não a lista inteira, senão filtrar levaria a páginas
-    // vazias.
-    const POR_PAGINA = 3;
+    // Paginação. POR_PAGINA é o único número a mexer quando o acervo crescer: 6 preenche
+    // duas linhas cheias na grade de três colunas. Ela pagina o resultado da busca, e não a
+    // lista inteira, senão filtrar levaria a páginas vazias.
+    const POR_PAGINA = 6;
     const pagesEl = document.querySelector('[data-blog-pages]');
     const gridEl = document.querySelector('.blog-grid');
     let pagina = 1;

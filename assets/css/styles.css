@@ -4095,6 +4095,15 @@ body[data-page="conteudos"] .page-hero + .section {
   transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
 }
 
+/* O display:flex acima é regra de autor e vence o `[hidden] { display: none }` do
+   navegador, que é regra de user agent. Sem esta linha, a paginação e a busca marcavam
+   `item.hidden = true` no JS, o atributo aparecia no DOM, e o card continuava desenhado
+   na tela: o resultado era a página inteira do acervo de uma vez. Mesmo motivo das
+   regras equivalentes de .blog-pagination e .blog-search-clear. */
+.blog-card[hidden] {
+  display: none;
+}
+
 .blog-card:hover {
   border-color: rgba(255, 112, 20, 0.35);
   box-shadow: var(--shadow-md);
