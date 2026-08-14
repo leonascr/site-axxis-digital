@@ -3883,7 +3883,12 @@ body[data-page="conteudos"] .page-hero + .section {
   content: '';
 }
 
+/* O reset global do site é `ul { list-style: none }`, que não alcança `ol`. Sem esta linha o
+   marcador nativo do navegador continuava sendo desenhado junto com o contador laranja do
+   ::before logo abaixo, e toda lista numerada das matérias saía com o número repetido
+   ("1. 1."). Vale para as sete matérias, não só para a mais recente. */
 .article-body ol {
+  list-style: none;
   counter-reset: article-step;
 }
 
