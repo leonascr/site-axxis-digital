@@ -1,6 +1,7 @@
 // Servidor estático simples, sem dependências, só para rodar o site em localhost.
 // Não altera HTML/CSS/JS do projeto: apenas serve os arquivos como estão.
 const http = require('http');
+const https = require('https');
 const fs = require('fs');
 const path = require('path');
 const zlib = require('zlib');
@@ -108,7 +109,150 @@ function responder(req, res, data, ext) {
   });
 }
 
+// Formulários do site. A página envia para /api/lead e o servidor repassa ao n8n, para o
+// endereço do webhook não ficar no código que qualquer visitante vê. Em 11/11/2026 um robô
+// leu esse endereço na página e mandou sondagens direto para o n8n.
+// O destino pode vir da variável LEAD_WEBHOOK_URL no painel de deploy (inclusive um endereço
+// interno, http://...); o valor abaixo vale enquanto ela não existir.
+const LEAD_WEBHOOK_URL = process.env.LEAD_WEBHOOK_URL
+  || 'https://n8n.axxiscontabilidadedigital.com.br/webhook/axxisdigital';
+const LEAD_CAMPOS = new Set([
+  'nome', 'empresa', 'whatsapp', 'email', 'contato', 'interesse', 'mensagem', 'assunto',
+  'website', 'origem_formulario', 'pagina', 'enviado_em',
+]);
+const LEAD_MAX_BYTES = 10 * 1024;
+const LEAD_LIMITE = 8;
+const LEAD_JANELA_MS = 10 * 60 * 1000;
+const leadEnvios = new Map();
+
+function responderJson(res, status, corpo) {
+  res.writeHead(status, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
+  res.end(JSON.stringify(corpo));
+}
+
+// Atrás do proxy do deploy, x-real-ip é o IP de quem acessou. O x-forwarded-for pode chegar
+// já preenchido pelo próprio cliente, então não serve para limitar envios.
+function ipDoCliente(req) {
+  return String(req.headers['x-real-ip'] || req.socket.remoteAddress || '').trim();
+}
+
+function passouDoLimite(ip) {
+  const agora = Date.now();
+  const recentes = (leadEnvios.get(ip) || []).filter((t) => agora - t < LEAD_JANELA_MS);
+  recentes.push(agora);
+  leadEnvios.set(ip, recentes);
+  // Limpeza de quem já saiu da janela, para o mapa não crescer sem fim.
+  if (leadEnvios.size > 5000) {
+    for (const [chave, tempos] of leadEnvios) {
+      if (agora - tempos[tempos.length - 1] >= LEAD_JANELA_MS) leadEnvios.delete(chave);
+    }
+  }
+  return recentes.length > LEAD_LIMITE;
+}
+
+// O navegador sempre manda Origin num POST. Exigir que seja o próprio site corta robô que
+// dispara direto de script; não é à prova de quem forja o cabeçalho, para isso existe o filtro no n8n.
+function mesmaOrigem(req) {
+  const host = (req.headers.host || '').toLowerCase().split(':')[0];
+  try {
+    return new URL(req.headers.origin || '').hostname.toLowerCase() === host;
+  } catch (err) {
+    return false;
+  }
+}
+
+function encaminharLead(dados, ip, pronto) {
+  let respondido = false;
+  const fim = (ok) => {
+    if (respondido) return;
+    respondido = true;
+    pronto(ok);
+  };
+
+  let destino;
+  try {
+    destino = new URL(LEAD_WEBHOOK_URL);
+  } catch (err) {
+    console.error('LEAD_WEBHOOK_URL inválida:', err.message);
+    fim(false);
+    return;
+  }
+
+  const corpo = JSON.stringify(dados);
+  const cliente = destino.protocol === 'http:' ? http : https;
+  const pedido = cliente.request(destino, {
+    method: 'POST',
+    timeout: 10000,
+    headers: {
+      'Content-Type': 'application/json',
+      'Content-Length': Buffer.byteLength(corpo),
+      'User-Agent': 'axxis-site',
+      'X-Cliente-IP': ip,
+    },
+  }, (resposta) => {
+    resposta.resume();
+    resposta.on('end', () => fim(resposta.statusCode >= 200 && resposta.statusCode < 300));
+  });
+  pedido.on('timeout', () => pedido.destroy(new Error('tempo esgotado')));
+  pedido.on('error', (err) => {
+    console.error('Falha ao repassar o formulário ao n8n:', err.message);
+    fim(false);
+  });
+  pedido.end(corpo);
+}
+
+function receberLead(req, res) {
+  if (req.method !== 'POST') {
+    res.writeHead(405, { Allow: 'POST' });
+    res.end();
+    return;
+  }
+
+  const ip = ipDoCliente(req);
+  if (!mesmaOrigem(req)) return responderJson(res, 403, { ok: false });
+  if (passouDoLimite(ip)) return responderJson(res, 429, { ok: false });
+  if (!/application\/json/i.test(req.headers['content-type'] || '')) return responderJson(res, 415, { ok: false });
+  if (Number(req.headers['content-length']) > LEAD_MAX_BYTES) {
+    responderJson(res, 413, { ok: false });
+    req.resume();
+    return;
+  }
+
+  const partes = [];
+  let tamanho = 0;
+  let grandeDemais = false;
+  req.on('data', (parte) => {
+    tamanho += parte.length;
+    if (tamanho > LEAD_MAX_BYTES) grandeDemais = true;
+    else partes.push(parte);
+  });
+  req.on('end', () => {
+    if (grandeDemais) return responderJson(res, 413, { ok: false });
+
+    let dados;
+    try {
+      dados = JSON.parse(Buffer.concat(partes).toString('utf8'));
+    } catch (err) {
+      return responderJson(res, 400, { ok: false });
+    }
+    if (!dados || typeof dados !== 'object' || Array.isArray(dados)) return responderJson(res, 400, { ok: false });
+
+    // Só segue o que os formulários do site mandam, e só como texto.
+    const limpo = {};
+    for (const [chave, valor] of Object.entries(dados)) {
+      if (LEAD_CAMPOS.has(chave) && typeof valor === 'string') limpo[chave] = valor.slice(0, 2000);
+    }
+
+    encaminharLead(limpo, ip, (ok) => responderJson(res, ok ? 200 : 502, { ok }));
+  });
+}
+
 const server = http.createServer((req, res) => {
+  if (req.url.split('?')[0] === '/api/lead') {
+    receberLead(req, res);
+    return;
+  }
+
   // decodeURIComponent lança URIError em qualquer sequência percent malformada (ex.: "/%").
   // Como isto acontece dentro do handler, a exceção não capturada derrubava o processo
   // inteiro: um único pedido de um bot tirava o site do ar até o container reiniciar.

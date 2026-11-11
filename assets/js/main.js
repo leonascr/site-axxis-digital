@@ -370,7 +370,9 @@
     });
   });
 
-  const LEAD_WEBHOOK_URL = 'https://n8n.axxiscontabilidadedigital.com.br/webhook/axxisdigital';
+  // Os formulários enviam para o próprio site (rota /api/lead do server.js), que repassa ao
+  // n8n. Assim o endereço do webhook não aparece no código da página.
+  const LEAD_ENDPOINT = '/api/lead';
 
   document.querySelectorAll('[data-lead-form]').forEach((form) => {
     form.addEventListener('submit', (event) => {
@@ -394,13 +396,13 @@
       payload.pagina = window.location.pathname;
       payload.enviado_em = new Date().toISOString();
 
-      fetch(LEAD_WEBHOOK_URL, {
+      fetch(LEAD_ENDPOINT, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       })
         .catch((error) => {
-          console.error('Falha ao enviar formulário para o webhook Axxis:', error);
+          console.error('Falha ao enviar o formulário:', error);
         })
         .finally(() => {
           form.reset();
